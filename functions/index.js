@@ -45,16 +45,11 @@ exports.encryptTicket = functions.https.onRequest(async (req, res) => {
 
 });
 
-exports.check_ticket_not_used = functions.https.onRequest(async (req, res) => {
+exports.get_ticket = functions.https.onRequest(async (req, res) => {
   const ticket_1 = await db.collection('tickets').doc('1').get()
   functions.logger.info("Hello logs!", {structuredData: true});
-  if (!ticket_1.json.is_used) {
-    ticket_1.update({is_used: true})
-    res.send("Ticket updated successfully");
-  }
-  else {
-    res.send("Invalid ticket, ticket has already been used")
-  }
+  ticket_1.update({is_used: true})
+  res.send(ticket_1);
 });
 
 exports.check_ticket_not_used = functions.https.onRequest(async (req, res) => {
@@ -62,7 +57,7 @@ exports.check_ticket_not_used = functions.https.onRequest(async (req, res) => {
   functions.logger.info("Hello logs!", {structuredData: true});
   if (!ticket_1.json.is_used) {
     ticket_1.update({is_used: true})
-    res.send(ticket_1);
+    res.send("Ticket updated successfully");
   }
   else {
     res.send("Invalid ticket, ticket has already been used")
