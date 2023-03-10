@@ -62,19 +62,32 @@ function storeTicket(index){
   }) 
 }
 
-storeTicket("test");
-
-async function getTicketById(collection, id) {
-  const ticketRef = db.collection(collection).doc(id);
-  const ticket = await ticketRef.get();
-
-  if (!ticket.exists) {
-    console.log('Ticket does not exist');
-  }
+function verifyTicket(id){
+  valid = false;
+  const ticketRef = db.collection("tickets").doc(id);
+  return ticketRef
+    .get()
+    .then(ticket=> {
+      if (!ticket.exists) {
+        console.log('Ticket does not exist');
+        throw new error('No ticket with this id exists');
+      }
+      else{
+        console.log(ticket.data());
+        console.log(ticket.data().data)
+      }
+    })
+ 
 
   const jsonData = JSON.stringify(ticket.data());
   return jsonData
+  console.log(ticket);
+
+  return valid; 
 }
+
+storeTicket("test");
+verifyTicket('test');
 
 // getTicketById('tickets', '123')
 // .then(result => {
