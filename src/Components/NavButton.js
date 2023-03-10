@@ -1,18 +1,38 @@
 import React from 'react';
-import { Button } from 'react-native';
+import { StyleSheet, Text, Pressable } from 'react-native';
 
-const NavButton = ({ page,navigation }) => {
+const NavButton = ({ page, label, navigation }) => {
   
     const handlePress = () => {
       navigation.navigate(page);
     };
   
     return (
-      <Button
-        title={`Go to ${page}`}
+      <Pressable
         onPress={handlePress}
-      />
+        style={styles.button}>
+        <Text style={styles.text}>{label}</Text>
+      </Pressable>
     );
   };
-  
-  export default NavButton;
+
+export default NavButton;
+
+const styles = StyleSheet.create({
+button: {
+    borderRadius: 15,
+    backgroundColor: '#00C6D2',
+    marginTop: 45,
+    position: 'relative',
+    height: 100,
+    alignItems: 'center',
+    justifyContent: 'center'
+},
+text: {
+    fontSize: 22,
+    lineHeight: 21,
+    fontWeight: 'bold',
+    letterSpacing: 0.25,
+    color: 'white',
+},
+});

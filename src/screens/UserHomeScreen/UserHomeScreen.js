@@ -7,18 +7,19 @@ import NavButton from '../../Components/NavButton';
 
 export default function UserHomeScreen(props) {
 
-    const [entityText, setEntityText] = useState('')
-    const [entities, setEntities] = useState([])
-
-    const entityRef = firebase.firestore().collection('entities')
-    const userID = props.extraData.id
+    const user = props.extraData
 
     return (
         <View style={styles.container}>
              <View>
-                <NavButton page="faafa" navigation={props.navigation}/>
-                <NavButton page="Purchase" navigation={props.navigation}/>
-                </View>
+                <Text style={{ fontSize: 32, textAlign: 'center', color: 'black', marginTop: 75, marginBottom: 25}}>
+                    Welcome {user.fullName}!
+                </Text>
+
+                <NavButton page="Purchase" label="Purchase Tickets" navigation={props.navigation}/>
+                <NavButton page="Manage" label="Manage Tickets" navigation={props.navigation}/>
+                <NavButton page="Login" label="Logout" navigation={props.navigation}/>
+             </View>
         </View>
     )
 }

@@ -5,15 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="acdc7e79-0281-40d4-ae99-1c015029074c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/screens/AdminHomeScreen/AdminHomeScreen.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/UserHomeScreen/UserHomeScreen.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/UserHomeScreen/styles.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/HomeScreen/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/HomeScreen/HomeScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/LoginScreen/LoginScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/LoginScreen/LoginScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Components/NavButton.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/Components/NavButton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/UserHomeScreen/UserHomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/UserHomeScreen/UserHomeScreen.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
