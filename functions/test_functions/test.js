@@ -12,6 +12,20 @@ const algo = 'aes-256-cbc';
 const key = crypto.randomBytes(32);
 const inVec = crypto.randomBytes(16);
 
+let rawHash = crypto.createHash('sha256');
+rawHash.update(key)
+let hash = rawHash.digest('hex');
+console.log(hash);
+
+function storeTicket(index, ticketInfo){
+  const storeLocation = db.collection("tickets").doc(index);
+  storeLocation.set({
+    Ticket: ticketInfo,
+    Timestamp: "10293"
+  }) 
+}
+storeTicket(hash, "test");
+
 async function getTicketById(collection, id) {
   const ticketRef = db.collection(collection).doc(id);
   const ticket = await ticketRef.get();
