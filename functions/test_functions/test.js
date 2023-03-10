@@ -12,19 +12,57 @@ const algo = 'aes-256-cbc';
 const key = crypto.randomBytes(32);
 const inVec = crypto.randomBytes(16);
 
-let rawHash = crypto.createHash('sha256');
-rawHash.update(key)
-let hash = rawHash.digest('hex');
-console.log(hash);
+function hashGen(text){
+  let rawHash = crypto.createHash('sha256');
+  rawHash.update(text);
+  let hash = rawHash.digest('hex');
+  console.log(hash);
+  return hash;
+}
 
-function storeTicket(index, ticketInfo){
+function randomStringGen(){
+  let c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  result = "";
+  for(i = 0; i < 16; i++){
+    result += c.charAt(Math.floor(Math.random()*c.length));
+  }
+  return result;
+}
+
+function encryptData(data){
+  const cipher = crypto.createCipheriv(algo, key, inVec);
+  let encryptedData = Buffer.from(cipher.update(data, 'utf-8', 'hex') + cipher.final('hex')).toString('base64');
+  return encryptedData;
+}
+
+function decryptData(data, k, iv){
+  const decipher = crypto.createDecipheriv(algo, k, iv);
+  const buff = Buffer.from(data, 'base64');
+  let decryptedData = decipher.update(buff.toString('utf8'), 'hex', 'utf8') + decipher.final('utf8');
+  return decryptedData;
+}
+
+function storeTicket(index){
   const storeLocation = db.collection("tickets").doc(index);
+  let rand = randomStringGen();
+  let secret = hashGen(rand);
+  let enc = encryptData('{"ticketSecret": '+secret+', "timestamp": "test timestamp"}')
+  let dec = decryptData(enc, key, inVec);
+  console.log({"Key": key, "IV": inVec});
+  console.log(enc);
+  console.log(dec);
   storeLocation.set({
-    Ticket: ticketInfo,
-    Timestamp: "10293"
+    Cost: "£20",
+    Owner: null,
+    eventName: "Bloodstock 2023",
+    key: {"Key": key, "IV": inVec},
+    ticketSecret: secret,
+    used: false,
+    data: enc
   }) 
 }
-storeTicket(hash, "test");
+
+storeTicket("test");
 
 async function getTicketById(collection, id) {
   const ticketRef = db.collection(collection).doc(id);
@@ -38,17 +76,17 @@ async function getTicketById(collection, id) {
   return jsonData
 }
 
-getTicketById('tickets', '123')
-.then(result => {
-  console.log(result);
-  const cipher = crypto.createCipheriv(algo, key, inVec);
-  let encryptedData = cipher.update(result, 'utf-8', 'hex');
-  encryptedData += cipher.final('hex');
+// getTicketById('tickets', '123')
+// .then(result => {
+//   console.log(result);
+//   const cipher = crypto.createCipheriv(algo, key, inVec);
+//   let encryptedData = cipher.update(result, 'utf-8', 'hex');
+//   encryptedData += cipher.final('hex');
 
-  console.log('Encrypted data:', encryptedData);
-})
-.catch(error => {
-  console.log(error);
-});
+//   console.log('Encrypted data:', encryptedData);
+// })
+// .catch(error => {
+//   console.log(error);
+// });
 
 // TODO - POST data to React Native endpoint
