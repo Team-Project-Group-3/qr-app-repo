@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button } from 'react-native'
 import styles from './styles';
 import { firebase } from '../../firebase/config'
+import LoginScreen from '../LoginScreen/LoginScreen';
+import NavButton from '../../Components/NavButton';
 
 export default function HomeScreen(props) {
 
@@ -10,6 +12,8 @@ export default function HomeScreen(props) {
 
     const entityRef = firebase.firestore().collection('entities')
     const userID = props.extraData.id
+
+    console.log(props.extraData.is_verifier)
 
     useEffect(() => {
         entityRef
@@ -61,8 +65,15 @@ export default function HomeScreen(props) {
         )
     }
 
+
     return (
         <View style={styles.container}>
+             <View>
+                <NavButton page="Login" navigation={props.navigation}/>
+                <NavButton page="Purchase" navigation={props.navigation}/>
+                </View>
+
+
             <View style={styles.formContainer}>
                 <TextInput
                     style={styles.input}
@@ -76,6 +87,8 @@ export default function HomeScreen(props) {
                 <TouchableOpacity style={styles.button} onPress={onAddButtonPress}>
                     <Text style={styles.buttonText}>Add</Text>
                 </TouchableOpacity>
+               
+
             </View>
             { entities && (
                 <View style={styles.listContainer}>
