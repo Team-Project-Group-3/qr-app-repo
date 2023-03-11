@@ -3,6 +3,7 @@ node_modules/
 dist/
 .idea/
 npm-debug.*
+*.lock
 *.jks
 *.p8
 *.p12
@@ -10,6 +11,7 @@ npm-debug.*
 *.mobileprovision
 *.orig.*
 web-build/
+package-lock.json
 
 # macOS
 .DS_Store
