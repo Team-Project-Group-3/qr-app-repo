@@ -1,16 +1,4 @@
 const crypto = require("crypto")
-const admin = require('firebase-admin');
-const serviceAccount = require('../../serviceAccount.json');
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
-
-const db = admin.firestore();
-const algo = 'aes-256-cbc';
-const key = crypto.randomBytes(32);
-const inVec = crypto.randomBytes(16);
-
 
 function hashGen(text){
   let rawHash = crypto.createHash('sha256');
@@ -30,7 +18,6 @@ function randomStringGen(){
 }
 
 function encryptData(data, algo, key, inVec){
-
   const cipher = crypto.createCipheriv(algo, key, inVec);
   let encryptedData = Buffer.from(cipher.update(data, 'utf-8', 'hex') + cipher.final('hex')).toString('base64');
   return encryptedData;
@@ -53,7 +40,7 @@ function storeTicket(index){
   console.log(enc);
   console.log(dec);
   storeLocation.set({
-    Cost: "£20",
+    Cost: "Â£20",
     Owner: null,
     eventName: "Bloodstock 2023",
     key: {"Key": key, "IV": inVec},
@@ -62,48 +49,6 @@ function storeTicket(index){
     data: enc
   }) 
 }
-
-function verifyTicket(id){
-  valid = false;
-  const ticketRef = db.collection("tickets").doc(id);
-  return ticketRef
-    .get()
-    .then(ticket=> {
-      if (!ticket.exists) {
-        console.log('Ticket does not exist');
-        throw new error('No ticket with this id exists');
-      }
-      else{
-        console.log(ticket.data());
-        console.log(ticket.data().data)
-      }
-    })
- 
-
-  const jsonData = JSON.stringify(ticket.data());
-  return jsonData
-  console.log(ticket);
-
-  return valid; 
-}
-
-storeTicket("test");
-verifyTicket('test');
-
-// getTicketById('tickets', '123')
-// .then(result => {
-//   console.log(result);
-//   const cipher = crypto.createCipheriv(algo, key, inVec);
-//   let encryptedData = cipher.update(result, 'utf-8', 'hex');
-//   encryptedData += cipher.final('hex');
-
-//   console.log('Encrypted data:', encryptedData);
-// })
-// .catch(error => {
-//   console.log(error);
-// });
-
-// TODO - POST data to React Native endpoint
 
 
 // function verifyTicket(id){
@@ -129,3 +74,5 @@ verifyTicket('test');
 
 //   return valid; 
 // }
+
+module.exports = { encryptData, decryptData }
