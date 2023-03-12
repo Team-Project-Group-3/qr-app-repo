@@ -9,6 +9,7 @@ export default function AdminHomeScreen({navigation}) {
 
     useEffect(()=> {
         const getBarCodeScannerPermissions = async () => {
+            // requests permissions
             const { status } = await BarCodeScanner.requestPermissionsAsync();
             setHasPermission(status === 'granted');
         };
@@ -17,6 +18,7 @@ export default function AdminHomeScreen({navigation}) {
     }, []);
 
     const handleBarCodeScanned = ({ type, data}) =>{
+        // function to handle data scanned from QR scanner
         setScanned(true);
         alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     };
