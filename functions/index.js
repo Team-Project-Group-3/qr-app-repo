@@ -71,12 +71,12 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
   if (!ticket.exists) {
     res.send('Ticket does not exist');
   }
-  const key = Buffer.from(ticket._fieldsProto.key);
-  const inVec = Buffer.from(ticket._fieldsProto.iv);
+  const key = ticket._fieldsProto.key;
+  const inVec = ticket._fieldsProto.iv;
 
-  // const decData = decryptData(encData,algo,key,inVec);
+  const decData = decryptData(encData,algo,key,inVec);
 
-  res.json({"key":key, "iv":inVec, "data":encData,"id":id});
+  res.json({"decData":decData});
 });
 
 exports.getTicket = functions.https.onRequest(async (req, res) => {
