@@ -9,6 +9,7 @@ export default function DevScreen(props) {
   const [data, setData] = useState(null);
   const [data2, setData2] = useState(null);
   const [data3, setData3] = useState(null);
+  const [data4, setData4] = useState(null);
 
   const handleClick = async () => {
     try {
@@ -43,6 +44,17 @@ export default function DevScreen(props) {
     }
   };
 
+  const handleClick4 = async () => {
+    try {
+      const response = await axios.get(
+        'https://us-central1-qrapp-fe2f3.cloudfunctions.net/helloWorld'
+      );
+      setData4(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <View>
       <Button title="Show Ticket id = 1" onPress={handleClick} />
@@ -51,6 +63,8 @@ export default function DevScreen(props) {
       {data2 && <QRCode value={JSON.stringify(data2)} size={200} />}
       <Button title="Show Ticket id = 3" onPress={handleClick3} />
       {data3 && <QRCode value={JSON.stringify(data3)} size={200} />}
+      <Button title="Hello world function" onPress={handleClick4} />
+      {data4 && <Text>{JSON.stringify(data4)}</Text>}
     </View>
   );
 }
