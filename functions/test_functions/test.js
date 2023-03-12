@@ -10,8 +10,8 @@ function hashGen(text){
 
 function randomStringGen(){
   let c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  result = "";
-  for(i = 0; i < 16; i++){
+  let  result = "";
+  for(let i = 0; i < 16; i++){
     result += c.charAt(Math.floor(Math.random()*c.length));
   }
   return result;
@@ -23,32 +23,32 @@ function encryptData(data, algo, key, inVec){
   return encryptedData;
 }
 
-function decryptData(data, k, iv){
+function decryptData(data, algo, k, iv){
   const decipher = crypto.createDecipheriv(algo, k, iv);
   const buff = Buffer.from(data, 'base64');
   let decryptedData = decipher.update(buff.toString('utf8'), 'hex', 'utf8') + decipher.final('utf8');
   return decryptedData;
 }
 
-function storeTicket(index){
-  const storeLocation = db.collection("tickets").doc(index);
-  let rand = randomStringGen();
-  let secret = hashGen(rand);
-  let enc = encryptData('{"ticketSecret": '+secret+', "timestamp": "test timestamp"}')
-  let dec = decryptData(enc, key, inVec);
-  console.log({"Key": key, "IV": inVec});
-  console.log(enc);
-  console.log(dec);
-  storeLocation.set({
-    Cost: "Â£20",
-    Owner: null,
-    eventName: "Bloodstock 2023",
-    key: {"Key": key, "IV": inVec},
-    ticketSecret: secret,
-    used: false,
-    data: enc
-  }) 
-}
+// function storeTicket(index){
+//   const storeLocation = db.collection("tickets").doc(index);
+//   let rand = randomStringGen();
+//   let secret = hashGen(rand);
+//   let enc = encryptData('{"ticketSecret": '+secret+', "timestamp": "test timestamp"}')
+//   let dec = decryptData(enc, key, inVec);
+//   console.log({"Key": key, "IV": inVec});
+//   console.log(enc);
+//   console.log(dec);
+//   storeLocation.set({
+//     Cost: "Â£20",
+//     Owner: null,
+//     eventName: "Bloodstock 2023",
+//     key: {"Key": key, "IV": inVec},
+//     ticketSecret: secret,
+//     used: false,
+//     data: enc
+//   }) 
+// }
 
 
 // function verifyTicket(id){

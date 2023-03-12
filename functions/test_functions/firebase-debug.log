@@ -1,46 +1,18 @@
-[debug] [2023-03-12T19:39:13.838Z] ----------------------------------------------------------------------
-[debug] [2023-03-12T19:39:13.840Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\benth\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy
-[debug] [2023-03-12T19:39:13.841Z] CLI Version:   11.24.1
-[debug] [2023-03-12T19:39:13.841Z] Platform:      win32
-[debug] [2023-03-12T19:39:13.841Z] Node Version:  v19.7.0
-[debug] [2023-03-12T19:39:13.841Z] Time:          Sun Mar 12 2023 19:39:13 GMT+0000 (Greenwich Mean Time)
-[debug] [2023-03-12T19:39:13.841Z] ----------------------------------------------------------------------
+[debug] [2023-03-12T20:59:00.961Z] ----------------------------------------------------------------------
+[debug] [2023-03-12T20:59:00.963Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\benth\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions:verifyTicket
+[debug] [2023-03-12T20:59:00.964Z] CLI Version:   11.24.1
+[debug] [2023-03-12T20:59:00.964Z] Platform:      win32
+[debug] [2023-03-12T20:59:00.964Z] Node Version:  v19.7.0
+[debug] [2023-03-12T20:59:00.964Z] Time:          Sun Mar 12 2023 20:59:00 GMT+0000 (Greenwich Mean Time)
+[debug] [2023-03-12T20:59:00.964Z] ----------------------------------------------------------------------
 [debug] 
-[debug] [2023-03-12T19:39:13.896Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
-[debug] [2023-03-12T19:39:13.897Z] > authorizing via signed-in user (benthompsonwatson1dev@gmail.com)
-[debug] [2023-03-12T19:39:13.897Z] [iam] checking project qrapp-fe2f3 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]
-[debug] [2023-03-12T19:39:13.899Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/qrapp-fe2f3:testIamPermissions [none]
-[debug] [2023-03-12T19:39:13.899Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/qrapp-fe2f3:testIamPermissions x-goog-quota-user=projects/qrapp-fe2f3
-[debug] [2023-03-12T19:39:13.899Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/qrapp-fe2f3:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
-[debug] [2023-03-12T19:39:14.117Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/qrapp-fe2f3:testIamPermissions 200
-[debug] [2023-03-12T19:39:14.118Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/qrapp-fe2f3:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","datastore.indexes.create","datastore.indexes.delete","datastore.indexes.list","datastore.indexes.update","firebase.projects.get"]}
-[debug] [2023-03-12T19:39:14.118Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/qrapp-fe2f3/serviceAccounts/qrapp-fe2f3@appspot.gserviceaccount.com:testIamPermissions [none]
-[debug] [2023-03-12T19:39:14.118Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/qrapp-fe2f3/serviceAccounts/qrapp-fe2f3@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
-[debug] [2023-03-12T19:39:14.368Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/qrapp-fe2f3/serviceAccounts/qrapp-fe2f3@appspot.gserviceaccount.com:testIamPermissions 200
-[debug] [2023-03-12T19:39:14.368Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/qrapp-fe2f3/serviceAccounts/qrapp-fe2f3@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
-[info] 
-[info] === Deploying to 'qrapp-fe2f3'...
-[info] 
-[info] i  deploying firestore, functions 
-[info] i  firestore: reading indexes from firestore.indexes.json... 
-[info] i  cloud.firestore: checking firestore.rules for compilation errors... 
-[debug] [2023-03-12T19:39:14.371Z] >>> [apiv2][query] POST https://firebaserules.googleapis.com/v1/projects/qrapp-fe2f3:test [none]
-[debug] [2023-03-12T19:39:14.371Z] >>> [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/qrapp-fe2f3:test [omitted]
-[debug] [2023-03-12T19:39:15.048Z] <<< [apiv2][status] POST https://firebaserules.googleapis.com/v1/projects/qrapp-fe2f3:test 200
-[debug] [2023-03-12T19:39:15.048Z] <<< [apiv2][body] POST https://firebaserules.googleapis.com/v1/projects/qrapp-fe2f3:test {}
-[info] +  cloud.firestore: rules file firestore.rules compiled successfully 
-[debug] [2023-03-12T19:39:15.050Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/qrapp-fe2f3 [none]
-[debug] [2023-03-12T19:39:15.266Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/qrapp-fe2f3 200
-[debug] [2023-03-12T19:39:15.266Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/qrapp-fe2f3 {"projectId":"qrapp-fe2f3","projectNumber":"160703065138","displayName":"QRApp","name":"projects/qrapp-fe2f3","resources":{"hostingSite":"qrapp-fe2f3"},"state":"ACTIVE","etag":"1_ae339864-2d2e-4c21-be68-0f3d376e4ede"}
-[info] i  functions: preparing codebase default for deployment 
-[info] i  functions: ensuring required API cloudfunctions.googleapis.com is enabled... 
-[info] i  functions: ensuring required API cloudbuild.googleapis.com is enabled... 
-[info] i  artifactregistry: ensuring required API artifactregistry.googleapis.com is enabled... 
-[debug] [2023-03-12T19:39:15.268Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/qrapp-fe2f3/services/cloudfunctions.googleapis.com [none]
-[debug] [2023-03-12T19:39:15.268Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/qrapp-fe2f3/services/cloudfunctions.googleapis.com x-goog-quota-user=projects/qrapp-fe2f3
-[debug] [2023-03-12T19:39:15.269Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/qrapp-fe2f3/services/runtimeconfig.googleapis.com [none]
-[debug] [2023-03-12T19:39:15.269Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/qrapp-fe2f3/services/runtimeconfig.googleapis.com x-goog-quota-user=projects/qrapp-fe2f3
-[debug] [2023-03-12T19:39:15.270Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/qrapp-fe2f3/services/cloudbuild.googleapis.com [none]
-[debug] [2023-03-12T19:39:15.270Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/qrapp-fe2f3/services/cloudbuild.googleapis.com x-goog-quota-user=projects/qrapp-fe2f3
-[debug] [2023-03-12T19:39:15.271Z] >>> [apiv2][query] GET https://serviceusage.googleapis.com/v1/projects/qrapp-fe2f3/services/artifactregistry.googleapis.com [none]
-[debug] [2023-03-12T19:39:15.271Z] >>> [apiv2][(partial)header] GET https://serviceusage.googleapis.com/v1/projects/qrapp-fe2f3/services/artifactregistry.googleapis.com x-goog-quota-user=projects/qrapp-fe2f3
+[debug] [2023-03-12T20:59:01.016Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-03-12T20:59:01.016Z] > authorizing via signed-in user (benthompsonwatson1dev@gmail.com)
+[debug] [2023-03-12T20:59:01.016Z] [iam] checking project qrapp-fe2f3 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2023-03-12T20:59:01.018Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/qrapp-fe2f3:testIamPermissions [none]
+[debug] [2023-03-12T20:59:01.018Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/qrapp-fe2f3:testIamPermissions x-goog-quota-user=projects/qrapp-fe2f3
+[debug] [2023-03-12T20:59:01.018Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/qrapp-fe2f3:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-03-12T20:59:01.691Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/qrapp-fe2f3:testIamPermissions 200
+[debug] [2023-03-12T20:59:01.691Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/qrapp-fe2f3:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-03-12T20:59:01.692Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/qrapp-fe2f3/serviceAccounts/qrapp-fe2f3@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-03-12T20:59:01.692Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/qrapp-fe2f3/serviceAccounts/qrapp-fe2f3@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
