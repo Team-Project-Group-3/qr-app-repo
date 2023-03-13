@@ -30,6 +30,7 @@ function createEvent(eventName){
   }
 }
 
+
 function encryptData(data, algo, key, inVec){
   const cipher = crypto.createCipheriv(algo, key, inVec);
   let encryptedData = Buffer.from(cipher.update(data, 'utf-8', 'hex') + cipher.final('hex')).toString('base64');
@@ -37,10 +38,22 @@ function encryptData(data, algo, key, inVec){
 }
 
 function decryptData(data, algo, k, iv){
-  const decipher = crypto.createDecipheriv(algo, k, iv);
-  const buff = Buffer.from(data, 'base64');
-  let decryptedData = decipher.update(buff.toString('utf8'), 'hex', 'utf8') + decipher.final('utf8');
-  return decryptedData;
+  try {
+    const decipher = crypto.createDecipheriv(algo, k, iv);
+    const buff = Buffer.from(data, 'base64');
+    let decryptedData = decipher.update(buff.toString('utf8'), 'hex', 'utf8') + decipher.final('utf8');
+    return {
+      status: 'success',
+      data: decryptedData,
+    };
+  } catch (err) {
+    console.error('An error occurred while decrypting the data:', err);
+    return {
+      status: 'error',
+      message: 'An error occurred while decrypting the data',
+      error: err,
+    };
+  }
 }
 
 //function storeTicket(index, eventName, seatNumber){
