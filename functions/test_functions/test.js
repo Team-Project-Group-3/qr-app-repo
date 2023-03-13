@@ -10,11 +10,24 @@ function hashGen(text){
 
 function randomStringGen(){
   let c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  result = "";
-  for(i = 0; i < 16; i++){
+  let  result = "";
+  for(let i = 0; i < 16; i++){
     result += c.charAt(Math.floor(Math.random()*c.length));
   }
   return result;
+}
+
+function createEvent(eventName){
+  const createEvent = db.collection("events").doc(eventName).collection("Tickets");
+  const numberOfTickets = 100;
+  for(i=1;i<numberOfTickets+1;i++){
+    let ticketNumber = "Ticket "+i;
+    console.log(ticketNumber);
+    let createTickets = createEvent.doc(ticketNumber);
+    createTickets.set({
+      TicketID: ticketNumber
+    })
+  }
 }
 
 function encryptData(data, algo, key, inVec){
@@ -23,49 +36,59 @@ function encryptData(data, algo, key, inVec){
   return encryptedData;
 }
 
-function decryptData(data, k, iv){
+function decryptData(data, algo, k, iv){
   const decipher = crypto.createDecipheriv(algo, k, iv);
   const buff = Buffer.from(data, 'base64');
   let decryptedData = decipher.update(buff.toString('utf8'), 'hex', 'utf8') + decipher.final('utf8');
   return decryptedData;
 }
 
-function storeTicket(index){
-  const storeLocation = db.collection("tickets").doc(index);
-  let rand = randomStringGen();
-  let secret = hashGen(rand);
-  let enc = encryptData('{"ticketSecret": '+secret+', "timestamp": "test timestamp"}')
-  let dec = decryptData(enc, key, inVec);
-  console.log({"Key": key, "IV": inVec});
-  console.log(enc);
-  console.log(dec);
-  storeLocation.set({
-    Cost: "£20",
-    Owner: null,
-    eventName: "Bloodstock 2023",
-    key: {"Key": key, "IV": inVec},
-    ticketSecret: secret,
-    used: false,
-    data: enc
-  }) 
-}
+//function storeTicket(index, eventName, seatNumber){
+//  const storeLocation = db.collection("tickets").doc(index);
+//  let rand = randomStringGen();
+//  let secret = hashGen(rand);
+//  let enc = encryptData('{"ticketSecret": '+secret+', "timestamp": "test timestamp"}')
+//  let dec = decryptData(enc, key, inVec);
+//  console.log({"Key": key, "IV": inVec});
+//  console.log(enc);
+//  console.log(dec);
+//  storeLocation.set({
+//    Cost: "£20",
+//    Owner: null,
+//    event: eventName,
+//    key: {"Key": key, "IV": inVec},
+//    seatNumber: seatNumber,
+//    ticketSecret: secret,
+//    used: false,
+//    data: enc
+//  })
+//}
 
 
-// function verifyTicket(id){
-//   valid = false;
-//   const ticketRef = db.collection("tickets").doc(id);
-//   return ticketRef
-//     .get()
-//     .then(ticket=> {
-//       if (!ticket.exists) {
-//         console.log('Ticket does not exist');
-//         throw new error('No ticket with this id exists');
-//       }
-//       else{
-//         console.log(ticket.data());
-//         console.log(ticket.data().data)
-//       }
-//     })
+//function verifyTicket(id){
+//  valid = false;
+//  const ticketRef = db.collection("tickets").doc(id);
+//  return ticketRef
+//    .get()
+//    .then(ticket=> {
+//      if (!ticket.exists) {
+//        console.log('Ticket does not exist');
+//        throw new error('No ticket with this id exists');
+//      }
+//      else{
+//        rawData = ticket.data();
+//        encData = rawData.data;
+//        ticketUsed = rawData.used;
+//        if(ticketUsed == false){
+//          //decrypt data and check timestamp against current time
+//          // if data is correct and timestamp is within certain range accept ticket, set used to true, return valid = true
+//          // else decline the ticket, note down failed attempt, return valid = false
+//        }
+//        return valid;
+//      }
+//    })
+//
+//}
  
 
 // //   const jsonData = JSON.stringify(ticket.data());

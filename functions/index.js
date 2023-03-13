@@ -1,19 +1,11 @@
-const functions = require("firebase-functions");
-const crypto = require("crypto")
+const functions = require('firebase-functions');
+const crypto = require('crypto');
 
 const { encryptData, decryptData } = require('./test_functions/test');
 
 const admin = require('firebase-admin');
 admin.initializeApp();
-
-exports.addMessage = functions.https.onRequest(async (req, res) => {
-  // Grab the text parameter.
-  const original = req.query.text;
-  // Push the new message into Firestore using the Firebase Admin SDK.
-  const writeResult = await admin.firestore().collection('messages').add({ original: original });
-  // Send back a message that we've successfully written the message
-  res.json({ result: `Message with ID: ${writeResult.id} added.` });
-});
+const algo = 'aes-256-cbc';
 
 // Encryption Function
 exports.encryptTicket = functions.https.onRequest(async (req, res) => {
@@ -22,19 +14,69 @@ exports.encryptTicket = functions.https.onRequest(async (req, res) => {
   const collection = 'tickets';
   const ticketRef = admin.firestore().collection(collection).doc(id);
   const ticket = await ticketRef.get();
-
-  console.log(ticket.data)
+  
   if (!ticket.exists) {
-    res.send('Ticket does not exist');
+    res.send({"ticketExists":"false"});
   }
-
-  const algo = 'aes-256-cbc';
   const key = crypto.randomBytes(32);
   const inVec = crypto.randomBytes(16);
 
-  const encData = encryptData(ticket, algo, key, inVec);
-  res.json(encData);
+  const payload = {
+    "ticketSecret":ticket._fieldsProto.ticketSecret.stringValue,
+    "timestamp": Date.now()
+  }
+  const encData = encryptData(JSON.stringify(payload), algo, key, inVec);
 
+  const qrPayload =  {
+    "encryptedData": encData,
+    "ticketId": id
+  }
+
+  const ticketMeta = {
+    "Cost": ticket._fieldsProto.Cost,
+    "Owner": ticket._fieldsProto.Owner,
+    "Event": ticket._fieldsProto.event,
+    "SeatNumber": ticket._fieldsProto.seatNumber,
+    "Used": ticket._fieldsProto.used
+  }
+
+  ticketRef.update({
+    key: key,
+    iv: inVec
+  })
+  .then(() => {
+    console.log('Document updated successfully');
+  })
+  .catch((error) => {
+    console.error('Error updating document:', error);
+  });
+
+  const messagePayload = {
+    "qrPayload" : qrPayload,
+    "ticketMeta": ticketMeta,
+    "ticketExists":"true"
+  }
+
+  res.json(messagePayload);
+});
+
+exports.verifyTicket = functions.https.onRequest(async (req, res) => {
+
+  const id = req.query.id;
+  const encData = req.query.encData;
+  const collection = 'tickets';
+  const ticketRef = admin.firestore().collection(collection).doc(id);
+  const ticket = await ticketRef.get();
+  
+  if (!ticket.exists) {
+    res.send('Ticket does not exist');
+  }
+  const key = ticket._fieldsProto.key;
+  const inVec = ticket._fieldsProto.iv;
+
+  const decData = decryptData(encData,algo,key,inVec);
+
+  res.json({"decData":decData});
 });
 
 exports.getTicket = functions.https.onRequest(async (req, res) => {
