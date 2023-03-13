@@ -98,4 +98,4 @@ function decryptData(data, algo, k, iv){
 //   return valid; 
 // }
 
-module.exports = { encryptData, decryptData }
+module.exports = { encryptData, decryptData, hashGen }
