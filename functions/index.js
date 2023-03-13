@@ -16,7 +16,7 @@ exports.encryptTicket = functions.https.onRequest(async (req, res) => {
   const ticket = await ticketRef.get();
   
   if (!ticket.exists) {
-    res.send('Ticket does not exist');
+    res.send({"ticketExists":"false"});
   }
   const key = crypto.randomBytes(32);
   const inVec = crypto.randomBytes(16);
@@ -32,13 +32,13 @@ exports.encryptTicket = functions.https.onRequest(async (req, res) => {
     "ticketId": id
   }
 
-  // const ticketMeta = {
-  //   // "Cost": ticket.Cost,
-  //   // "Owner": ticket.Owner,
-  //   // "Event": ticket.event,
-  //   "SeatNumber": ticket.seatNumber,
-  //   // "Used": ticket.used
-  // }
+  const ticketMeta = {
+    "Cost": ticket._fieldsProto.Cost,
+    "Owner": ticket._fieldsProto.Owner,
+    "Event": ticket._fieldsProto.event,
+    "SeatNumber": ticket._fieldsProto.seatNumber,
+    "Used": ticket._fieldsProto.used
+  }
 
   ticketRef.update({
     key: key,
@@ -53,8 +53,8 @@ exports.encryptTicket = functions.https.onRequest(async (req, res) => {
 
   const messagePayload = {
     "qrPayload" : qrPayload,
-    "ticketKey" : key,
-    "ticketIV" : inVec,
+    "ticketMeta": ticketMeta,
+    "ticketExists":"true"
   }
 
   res.json(messagePayload);
