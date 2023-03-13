@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, StyleSheet } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-
+import styles from './scanStyles';
 
 export default function AdminHomeScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -32,7 +32,7 @@ export default function AdminHomeScreen({navigation}) {
 
     return(
         <View>
-            <BarCodeScanner
+            <BarCodeScanner style={styles.camera}
              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
              />
         {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
