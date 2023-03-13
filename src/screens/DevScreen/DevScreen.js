@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
+import { View, Text, Button } from 'react-native';
 import axios from 'axios';
 
 export default function DevScreen(props) {
   const [id, setId] = useState('');
   const [data, setData] = useState(null);
-  const userId = props.extraData.id
 
   const handleClick = async () => {
     try {
@@ -19,12 +19,6 @@ export default function DevScreen(props) {
 
   return (
     <View>
-      <TextInput
-        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-        onChangeText={setId}
-        value={id}
-        placeholder="Enter ticket ID"
-      />
       <Button title="Buy Ticket" onPress={handleClick} />
       {data && data.ticketExists ? (
         <QRCode value={JSON.stringify(data.qrPayload)} size={200} />
