@@ -7,27 +7,27 @@ const admin = require('firebase-admin');
 admin.initializeApp();
 const algo = 'aes-256-cbc';
 
-// Encryption Function
-exports.encryptTicket = functions.https.onRequest(async (req, res) => {
+exports.getTicket = functions.https.onRequest(async (req, res) => {
 
   const id = req.query.id;
   const collection = 'tickets';
   const ticketRef = admin.firestore().collection(collection).doc(id);
   const ticket = await ticketRef.get();
-  
-  if (!ticket.exists) {
-    res.send({"ticketExists":"false"});
-  }
   const key = crypto.randomBytes(32);
   const inVec = crypto.randomBytes(16);
 
+  if (!ticket.exists) {
+    res.send({ "ticketExists": "false" });
+  }
+
   const payload = {
-    "ticketSecret":ticket._fieldsProto.ticketSecret.stringValue,
+    "ticketSecret": ticket._fieldsProto.ticketSecret.stringValue,
     "timestamp": Date.now()
   }
+
   const encData = encryptData(JSON.stringify(payload), algo, key, inVec);
 
-  const qrPayload =  {
+  const qrPayload = {
     "encryptedData": encData,
     "ticketId": id
   }
@@ -44,17 +44,17 @@ exports.encryptTicket = functions.https.onRequest(async (req, res) => {
     key: key,
     iv: inVec
   })
-  .then(() => {
-    console.log('Document updated successfully');
-  })
-  .catch((error) => {
-    console.error('Error updating document:', error);
-  });
+    .then(() => {
+      console.log('Document updated successfully');
+    })
+    .catch((error) => {
+      console.error('Error updating document:', error);
+    });
 
   const messagePayload = {
-    "qrPayload" : qrPayload,
+    "qrPayload": qrPayload,
     "ticketMeta": ticketMeta,
-    "ticketExists":"true"
+    "ticketExists": "true"
   }
 
   res.json(messagePayload);
@@ -67,16 +67,64 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
   const collection = 'tickets';
   const ticketRef = admin.firestore().collection(collection).doc(id);
   const ticket = await ticketRef.get();
-  
+
   if (!ticket.exists) {
-    res.send('Ticket does not exist');
+    res.json({
+      "status": "unsuccessful",
+      "response": "ticket does not exist"
+    });
   }
-  const key = ticket._fieldsProto.key;
-  const inVec = ticket._fieldsProto.iv;
 
-  const decData = decryptData(encData,algo,key,inVec);
+  try {
+    const key = ticket._fieldsProto.key.bytesValue;
+    const inVec = ticket._fieldsProto.iv.bytesValue;
+    const decData = decryptData(encData, algo, key, inVec);
+    const decJSON = JSON.parse(decData.data);
+    const trueSecret = ticket._fieldsProto.ticketSecret.stringValue;
+    const sentSecret = decJSON.ticketSecret;
+    const currentTime = Date.now();
+    const qrTime = decJSON.timestamp;
+    const difference = currentTime - qrTime;
+    const timeWindow = 60000;
 
-  res.json({"decData":decData});
+    if (decJSON.status == 'error') {
+      res.json({
+        "status": "unsuccessful",
+        "response": "invalid ticket"
+      });
+    }
+    if (trueSecret != sentSecret) {
+      res.json({
+        "status": "unsuccessful",
+        "response": "invalid ticket"
+      });
+    }
+    if (ticket._fieldsProto.used.booleanValue) {
+      res.json({
+        "status": "unsuccessful",
+        "response": "ticket already used",
+      });
+    }
+    if (difference <= timeWindow) {
+      // ticket.update({
+      //   isUsed: true
+      // });
+      res.json({
+        "status": "success",
+        "response": "ticket valid"
+      });
+    } else {
+      res.json({
+        "status": "unsuccessful",
+        "response": "expired"
+      });
+    }
+  } catch (error) {
+    res.json({
+      "status": "failure",
+      "response": "unable to decrypt"
+    });
+  }
 });
 
 exports.generateTicket = functions.https.onRequest(async (req, res) => {
@@ -87,10 +135,10 @@ exports.generateTicket = functions.https.onRequest(async (req, res) => {
   ticketInfo.used = false;
   ticketInfo.cost = (await admin.firestore().collection('events').doc(ticketInfo.eventName).get()).data().cost;
   ticketInfo.ticketSecret = hashGen(ticketInfo.uid);
-  
+
   admin.firestore().collection('tickets').add(ticketInfo)
     .then(() => {
-      res.json({ticketInfo})
+      res.json({ ticketInfo })
     })
     .catch((error) => {
       res.status(500).send(error);
