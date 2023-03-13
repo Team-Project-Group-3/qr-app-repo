@@ -12,4 +12,6 @@ export { default as AdminHomeScreen } from './AdminHomeScreen/AdminHomeScreen'
 
 export { default as ManageScreen } from './ManageScreen/ManageScreen'
 
+export { default as EventScreen } from './EventScreen/EventScreen'
+
 export { default as DevScreen } from './DevScreen/DevScreen'

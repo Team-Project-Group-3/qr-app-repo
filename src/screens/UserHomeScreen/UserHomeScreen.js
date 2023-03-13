@@ -16,7 +16,7 @@ export default function UserHomeScreen(props) {
                     Welcome {user.fullName}!
                 </Text>
 
-                <NavButton page="Purchase" label="Purchase Tickets" navigation={props.navigation}/>
+                <NavButton page="Purchase" label="Purchase Tickets" navigation={props.navigation} />
                 <NavButton page="Manage" label="Manage Tickets" navigation={props.navigation}/>
                 <NavButton page="Login" label="Logout" navigation={props.navigation}/>
              </View>
