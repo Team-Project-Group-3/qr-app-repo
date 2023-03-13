@@ -3,24 +3,44 @@ import { TouchableOpacity, Text, Linking, View, Image, ImageBackground, BackHand
 import QRCodeScanner from 'react-native-qrcode-scanner';
 import styles from './scanStyles';
 
-class Scan extends Component{
-    constructor(props){
-        super(props);
-        this.state = {
-            scan: false,
-            ScanResult: false,
-            result: null
+import React, { useEffect, useState } from 'react'
+import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, StyleSheet } from 'react-native'
+import { BarCodeScanner } from 'expo-barcode-scanner'
+import styles from './scanStyles';
+
+export default function AdminHomeScreen({navigation}) {
+    const [hasPermission, setHasPermission] = useState(null);
+    const [scanned, setScanned] = useState(false);
+
+    useEffect(()=> {
+        const getBarCodeScannerPermissions = async () => {
+            // requests permissions
+            const { status } = await BarCodeScanner.requestPermissionsAsync();
+            setHasPermission(status === 'granted');
         };
+
+        getBarCodeScannerPermissions();
+    }, []);
+
+    const handleBarCodeScanned = ({ type, data}) =>{
+        // function to handle data scanned from QR scanner
+        setScanned(true);
+        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    };
+
+    if (hasPermission === null) {
+        return <Text>Requesting for camera permission</Text>;
     }
-    onSuccess = (e) => {
-        // decrypt QR
-        // check token
-        // check with DB
+    if (hasPermission === false) {
+        return <Text>Camera permissions rejected</Text>;
     }
-    activeQR = () => {
-        this.setState({ scan: true })
-    }
-    scanAgain = () => {
-        this.setState({ scan: true, ScanResult: false })
-    }
+
+    return(
+        <View>
+            <BarCodeScanner style={styles.camera}
+             onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+             />
+        {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+        </View>
+    );
 }
