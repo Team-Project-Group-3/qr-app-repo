@@ -20,4 +20,3 @@ web-build/
 functions/test_functions/firebase-debug.log
 functions/test_functions/firebase-debug.log
 .vscode/settings.json
-package-lock.json
