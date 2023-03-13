@@ -29,7 +29,7 @@ export default function LoginScreen({navigation}) {
                         }
                         const user = firestoreDocument.data()
 
-                        if(user.is_verifier) navigation.navigate('AdminHome', {user})
+                        if(user.isVerifier) navigation.navigate('AdminHome', {user})
                         else navigation.navigate('UserHome', {user})
                     })
                     .catch(error => {

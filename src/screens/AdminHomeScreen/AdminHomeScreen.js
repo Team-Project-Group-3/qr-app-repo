@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, StyleSheet } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
-import styles from './scanStyles';
+import styles from '../ScanningScreen/scanStyles';
 
 export default function AdminHomeScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(null);
