@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { firebase } from './src/firebase/config'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { LoginScreen, HomeScreen, RegistrationScreen, PurchasePage, UserHomeScreen, AdminHomeScreen} from './src/screens'
+import { LoginScreen, HomeScreen, RegistrationScreen, PurchasePage, UserHomeScreen, AdminHomeScreen, ManageScreen} from './src/screens'
 import {decode, encode} from 'base-64'
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
@@ -50,14 +50,17 @@ export default function App() {
             <Stack.Screen name="Purchase" component={PurchasePage} />
             <Stack.Screen name="Registration" component={RegistrationScreen} />
             <Stack.Screen name="Home">
-                        {props => <HomeScreen {...props} navigation={props.navigation} extraData={user} />}
-                      </Stack.Screen>
+                {props => <HomeScreen {...props} navigation={props.navigation} extraData={user} />}
+            </Stack.Screen>
             <Stack.Screen name="UserHome">
                 {props => <UserHomeScreen {...props} navigation={props.navigation} extraData={user} />}
             </Stack.Screen>
             <Stack.Screen name="AdminHome">
-                            {props => <AdminHomeScreen {...props} navigation={props.navigation} extraData={user} />}
-                        </Stack.Screen>
+                {props => <AdminHomeScreen {...props} navigation={props.navigation} extraData={user} />}
+            </Stack.Screen>
+            <Stack.Screen name="Manage">
+                {props => <ManageScreen {...props} navigation={props.navigation} extraData={user} />}
+            </Stack.Screen>
           </>
 
       </Stack.Navigator>
