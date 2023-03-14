@@ -32,9 +32,9 @@ exports.getTicket = functions.https.onRequest(async (req, res) => {
   }
 
   const ticketMeta = {
-    "cost": ticket._fieldsProto.Cost,
-    "owner": ticket._fieldsProto.Owner,
-    "event": ticket._fieldsProto.event,
+    "cost": ticket._fieldsProto.cost,
+    "owner": ticket._fieldsProto.uid,
+    "event": ticket._fieldsProto.eventName,
     "seatNumber": ticket._fieldsProto.seatNumber,
     "used": ticket._fieldsProto.used
   }
@@ -105,19 +105,28 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
       });
     }
     if (difference <= timeWindow) {
-
+      used = true;
       try {
-        ticket.update({
-          isUsed: true
+        ticketRef.update({
+          used: used,
+        })
+          .then(() => {
+            console.log('Document updated successfully');
+          })
+          .catch((error) => {
+            console.error('Error updating document:', error);
+          })
+        res.json({
+          "status": "success",
+          "response": "ticket valid"
         });
       } catch (error) {
-        console.error('An error occurred while updating the ticket:', error);
+        res.json({
+          "status": "unsuccessful",
+          "response": "an error occured while changing the isUsed property"
+        });
       }
-
-      res.json({
-        "status": "success",
-        "response": "ticket valid"
-      });
+      
     } else {
       res.json({
         "status": "unsuccessful",
@@ -131,6 +140,7 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
     });
   }
 });
+
 
 exports.generateTicket = functions.https.onRequest(async (req, res) => {
   // request contains uid, eventName
