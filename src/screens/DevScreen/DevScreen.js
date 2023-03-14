@@ -1,39 +1,36 @@
-import React, { useEffect, useState } from 'react'
-import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button } from 'react-native'
-import styles from './styles';
-import { firebase } from '../../firebase/config'
+import React, { useEffect, useState } from 'react';
+import { View, Button } from 'react-native';
+import { SelectList } from 'react-native-dropdown-select-list';
 import axios from 'axios';
-import QRCode from 'react-native-qrcode-svg';
 
 export default function DevScreen(props) {
-  const [id, setId] = useState('');
-const [data, setData] = useState(null);
+  const [selected, setSelected] = useState('');
 
-const handleClick = async () => {
-  try {
-    const response = await axios.get(
-      `https://us-central1-qrapp-fe2f3.cloudfunctions.net/encryptTicket?id=${id}`
-    );
-    setData(response.data);
-  } catch (error) {
-    console.error(error);
-  }
-};
+  const eventPlaceholder = [
+    { key: '1', value: 'Parklife' },
+    { key: '2', value: 'Leeds Fest' },
+    { key: '3', value: 'Elon Musk Convention' },
+    { key: '4', value: 'Bloodstock 2023' }
+  ]
 
-return (
-  <View>
-    <TextInput
-      style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
-      onChangeText={setId}
-      value={id}
-      placeholder="Enter ticket ID"
-    />
-    <Button title="Show Ticket" onPress={handleClick} />
-    {data && data.ticketExists ? (
-      <QRCode value={JSON.stringify(data.qrPayload)} size={200} />
-    ) : (
-      <Text>Ticket does not exist</Text>
-    )}
-  </View>
-);
+  const sendTicketGeneration = async () => {
+    await axios.get(`https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=123&eventName=${selected}`)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  return (
+    <View>
+      <SelectList
+        setSelected={setSelected}
+        data={eventPlaceholder}
+        save='value'
+      />
+      <Button title="Buy Ticket" onPress={sendTicketGeneration} />
+    </View>
+  )
 }

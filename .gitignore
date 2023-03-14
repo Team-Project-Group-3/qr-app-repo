@@ -19,3 +19,6 @@ web-build/
 .metro-health-check*
 functions/test_functions/firebase-debug.log
 functions/test_functions/firebase-debug.log
+.vscode/settings.json
+
+firebase-debug.log
