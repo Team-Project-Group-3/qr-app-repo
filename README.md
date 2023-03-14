@@ -1,3 +1,13 @@
+## Project Contributors
+
+- 💻 Ben Thompson-Watson
+- 💻 Dylan Bell
+- 💻 Shaun Carter
+- 💻 Travis Higgins
+- 💻 Joshua Lowery
+- 💻 John Mitchell
+- 💻 Matthew Houghton
+
 ### User Login Details
 
 email = testuser@email.com
