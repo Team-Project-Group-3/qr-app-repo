@@ -8,7 +8,7 @@ export default function DevScreen(props) {
 
   const eventPlaceholder = [
     { key: '1', value: 'Parklife' },
-    { key: '2', value: 'Leeds Fest' },
+    { key: '2', value: 'Leeds Festival' },
     { key: '3', value: 'Elon Musk Convention' },
     { key: '4', value: 'Bloodstock 2023' }
   ]
