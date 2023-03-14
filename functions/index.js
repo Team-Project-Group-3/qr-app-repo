@@ -1,9 +1,8 @@
 const functions = require('firebase-functions');
 const crypto = require('crypto');
-
 const { encryptData, decryptData, hashGen } = require('./test_functions/test');
-
 const admin = require('firebase-admin');
+
 admin.initializeApp();
 const algo = 'aes-256-cbc';
 
@@ -33,11 +32,11 @@ exports.getTicket = functions.https.onRequest(async (req, res) => {
   }
 
   const ticketMeta = {
-    "Cost": ticket._fieldsProto.Cost,
-    "Owner": ticket._fieldsProto.Owner,
-    "Event": ticket._fieldsProto.event,
-    "SeatNumber": ticket._fieldsProto.seatNumber,
-    "Used": ticket._fieldsProto.used
+    "cost": ticket._fieldsProto.Cost,
+    "owner": ticket._fieldsProto.Owner,
+    "event": ticket._fieldsProto.event,
+    "seatNumber": ticket._fieldsProto.seatNumber,
+    "used": ticket._fieldsProto.used
   }
 
   ticketRef.update({
@@ -106,9 +105,15 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
       });
     }
     if (difference <= timeWindow) {
-      // ticket.update({
-      //   isUsed: true
-      // });
+      
+      try {
+        ticket.update({
+          isUsed: true
+        });
+      } catch (error) {
+        console.error('An error occurred while updating the ticket:', error);
+      }
+      
       res.json({
         "status": "success",
         "response": "ticket valid"
@@ -143,23 +148,4 @@ exports.generateTicket = functions.https.onRequest(async (req, res) => {
     .catch((error) => {
       res.status(500).send(error);
     });
-});
-
-exports.getTicket = functions.https.onRequest(async (req, res) => {
-  const ticket_1 = await db.collection('tickets').doc('1').get()
-  functions.logger.info("Hello logs!", { structuredData: true });
-  ticket_1.update({ is_used: true })
-  res.send(ticket_1);
-});
-
-exports.checkTicketValid = functions.https.onRequest(async (req, res) => {
-  const ticket_1 = await db.collection('tickets').doc('1').get()
-  functions.logger.info("Hello logs!", { structuredData: true });
-  if (!ticket_1.json.is_used) {
-    ticket_1.update({ is_used: true })
-    res.send("Ticket updated successfully");
-  }
-  else {
-    res.send("Invalid ticket, ticket has already been used")
-  }
 });
