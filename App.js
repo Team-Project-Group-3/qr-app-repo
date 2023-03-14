@@ -50,8 +50,8 @@ export default function App() {
         {
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Dev" component={DevScreen} />
-            <Stack.Screen name="Dev2" component={DevScreen2} />
+            <Stack.Screen name="Buy Ticket" component={DevScreen} />
+            <Stack.Screen name="QR Code Tester" component={DevScreen2} />
             <Stack.Screen name="Registration" component={RegistrationScreen} />
             <Stack.Screen name="Home">
                         {props => <HomeScreen {...props} extraData={user} />}

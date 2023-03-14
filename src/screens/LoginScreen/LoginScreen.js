@@ -15,11 +15,11 @@ export default function LoginScreen({navigation}) {
     }
 
     const onDevLinkPress = () => {
-        navigation.navigate('Dev')
+        navigation.navigate('Buy Ticket')
     }
 
     const onDev2LinkPress = () => {
-        navigation.navigate('Dev2')
+        navigation.navigate('QR Code Tester')
     }
 
     const onLoginPress = () => {
@@ -87,10 +87,10 @@ export default function LoginScreen({navigation}) {
                     <Text style={styles.footerText}>Don't have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text></Text>
                 </View>
                 <View style={styles.footerView}>
-                    <Text style={styles.footerText}>Go To Dev Page <Text onPress={onDevLinkPress} style={styles.footerLink}>Go To Dev Page</Text></Text>
+                    <Text style={styles.footerText}>Go to <Text onPress={onDevLinkPress} style={styles.footerLink}>Buy Ticket Dev Page</Text></Text>
                 </View>
                 <View style={styles.footerView}>
-                    <Text style={styles.footerText}>Go To Dev2 Page <Text onPress={onDev2LinkPress} style={styles.footerLink}>Go To Dev2 Page</Text></Text>
+                    <Text style={styles.footerText}>Go to <Text onPress={onDev2LinkPress} style={styles.footerLink}>QR Code Tester Dev Page</Text></Text>
                 </View>
             </KeyboardAwareScrollView>
         </View>

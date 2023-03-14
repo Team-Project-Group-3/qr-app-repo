@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Button } from 'react-native';
+import { View, Button, StyleSheet } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import axios from 'axios';
 
@@ -30,7 +30,21 @@ export default function DevScreen(props) {
         data={eventPlaceholder}
         save='value'
       />
-      <Button title="Buy Ticket" onPress={sendTicketGeneration} />
+      <View style={styles.buttonContainer}>
+        <Button title="Buy Ticket" onPress={sendTicketGeneration} />
+      </View>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginHorizontal: 50,
+    marginTop: 20
+  },
+  buttonText: {
+    textAlign: 'center'
+  }
+});
