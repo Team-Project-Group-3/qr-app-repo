@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, StyleSheet } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import axios from 'axios';
-import styles from '../ScanningScreen/scanStyles';
+import styles from './scanStyles';
 import { Background } from '@react-navigation/elements';
 
 export default function AdminHomeScreen({navigation}) {
