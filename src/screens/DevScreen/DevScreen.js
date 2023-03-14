@@ -13,44 +13,24 @@ export default function DevScreen(props) {
     { key: '4', value: 'Bloodstock 2023' }
   ]
 
-  useEffect(() => {
-    const send = axios.get(`https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=123&eventName=${selected}`)
+  const sendTicketGeneration = async () => {
+    await axios.get(`https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=123&eventName=${selected}`)
       .then((response) => {
-        console.log(response)
+        console.log(response);
       })
       .catch((e) => {
-        console.log(e)
-      })
-  }, [])
+        console.log(e);
+      });
+  };
 
   return (
     <View>
       <SelectList
         setSelected={setSelected}
         data={eventPlaceholder}
+        save='value'
       />
-      <Button title="Buy Ticket" onClick={send} />
+      <Button title="Buy Ticket" onPress={sendTicketGeneration} />
     </View>
   )
 }
-
-  // return (
-  //   <View>
-  //     <SelectList
-  //       setSelected={setSelected}
-  //       data={eventPlaceholder}
-  //     />
-
-  //     <Button title="Buy Ticket" />
-  //   </View>
-  // );
-
-  // const handleClick = async () => {
-  //   try {
-  //     const event = selected;
-  //     const response = await axios.get(
-  //       `https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=123&eventName=${event}`)
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };

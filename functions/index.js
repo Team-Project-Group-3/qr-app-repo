@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 const crypto = require('crypto');
-const { encryptData, decryptData, hashGen } = require('./test_functions/test');
+const { encryptData, decryptData, hashGen, randomStringGen } = require('./test_functions/test');
 const admin = require('firebase-admin');
 
 admin.initializeApp();
@@ -105,7 +105,7 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
       });
     }
     if (difference <= timeWindow) {
-      
+
       try {
         ticket.update({
           isUsed: true
@@ -113,7 +113,7 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
       } catch (error) {
         console.error('An error occurred while updating the ticket:', error);
       }
-      
+
       res.json({
         "status": "success",
         "response": "ticket valid"
@@ -139,9 +139,9 @@ exports.generateTicket = functions.https.onRequest(async (req, res) => {
   // add cost (lookup eventName), ticketSecret (hashgen), used=false, owner = uid, add ticketid to uid ticketsOwned array
   ticketInfo.used = false;
   ticketInfo.cost = (await admin.firestore().collection('events').doc(ticketInfo.eventName).get()).data().cost;
-  ticketInfo.ticketSecret = hashGen(ticketInfo.uid);
+  ticketInfo.ticketSecret = hashGen(randomStringGen);
 
-  admin.firestore().collection('tickets').add(ticketInfo)
+  await admin.firestore().collection('tickets').add(ticketInfo)
     .then(() => {
       res.json({ ticketInfo })
     })
