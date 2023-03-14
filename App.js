@@ -5,12 +5,14 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { LoginScreen, HomeScreen, RegistrationScreen, DevScreen} from './src/screens'
 import {decode, encode} from 'base-64'
+import { usePreventScreenCapture } from 'expo-screen-capture';
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  usePreventScreenCapture();
 
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
