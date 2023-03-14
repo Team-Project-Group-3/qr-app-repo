@@ -12,6 +12,8 @@ export default function PurchaseScreen(props) {
     
     const [events, setEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
+    const [ticket, setTicket] = useState(null);
+    
 
     useEffect(() => {
         const unsubscribe = eventsRef.onSnapshot((querySnapshot) => {
@@ -34,12 +36,22 @@ export default function PurchaseScreen(props) {
     };
 
     const buyTicket = (item) => {
-        console.log(item.id)
-        console.log(user.id)
+       ticketName = (item.id)
+        userName = (user.id)
+        fetch('https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=${userName}&eventName=${ticketName}')
+      .then(response => response.json())
+      .then((data) => console.log(data))
+      
+      /*
+      .then(data => setTicket(data))
+      .then(console.log(data))
+      .catch(error => console.error(error));*/
+      
     }
 
     return(
         <View>
+            <Text>Credits:  {user.credit}</Text>
              <Text style={styles.title}>Upcoming Events</Text>
             <FlatList
                 data={events}
