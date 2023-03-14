@@ -1,45 +1,56 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Button } from 'react-native';
 import { SelectList } from 'react-native-dropdown-select-list';
 import axios from 'axios';
 
 export default function DevScreen(props) {
-  const [id, setId] = useState('');
   const [selected, setSelected] = useState('');
-  const [data, setData] = useState(null);
 
-  const items = [
-    {key:'1', value:'Parklife'},
-    {key:'2', value:'Leeds Fest'},
-    {key:'3', value:'Boomtown'},
-    {key:'4', value:'Bloodstock 2023'}
-  ] 
+  const eventPlaceholder = [
+    { key: '1', value: 'Parklife' },
+    { key: '2', value: 'Leeds Fest' },
+    { key: '3', value: 'Elon Musk Convention' },
+    { key: '4', value: 'Bloodstock 2023' }
+  ]
 
-  const handleClick = async () => {
-    try {
-      const response = await axios.get(
-        'https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=${userId}&eventName=Parklife'
-      );
-      setData(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  useEffect(() => {
+    const send = axios.get(`https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=123&eventName=${selected}`)
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((e) => {
+        console.log(e)
+      })
+  }, [])
 
   return (
     <View>
       <SelectList
-        setSelected={(val) => setSelected(val)}
-        data={items}
-        save='value'
+        setSelected={setSelected}
+        data={eventPlaceholder}
       />
-      
-      <Button title="Buy Ticket" onPress={handleClick} />
-      {data && data.ticketExists ? (
-        <QRCode value={JSON.stringify(data.qrPayload)} size={200} />
-      ) : (
-        <Text>Ticket Purchased</Text>
-      )}
+      <Button title="Buy Ticket" onClick={send} />
     </View>
-  );
+  )
 }
+
+  // return (
+  //   <View>
+  //     <SelectList
+  //       setSelected={setSelected}
+  //       data={eventPlaceholder}
+  //     />
+
+  //     <Button title="Buy Ticket" />
+  //   </View>
+  // );
+
+  // const handleClick = async () => {
+  //   try {
+  //     const event = selected;
+  //     const response = await axios.get(
+  //       `https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=123&eventName=${event}`)
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
