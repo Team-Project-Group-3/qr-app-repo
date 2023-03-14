@@ -13,6 +13,7 @@ export default function PurchaseScreen(props) {
     const [events, setEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [ticket, setTicket] = useState(null);
+    const [success, setSuccess] = useState('');
     
 
     useEffect(() => {
@@ -41,7 +42,13 @@ export default function PurchaseScreen(props) {
         const url = `https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=${userName}&eventName=${ticketName}`;
         fetch(url)
       .then(response => response.json())
-      .then((data) => console.log(data))
+      .then((data) => {
+        setSuccess('Ticket purchased successfully!');
+        console.log(data);
+    })
+    .catch(error => {
+        console.log('Error: ', error );
+    });
       
       /*
       .then(data => setTicket(data))
@@ -53,6 +60,9 @@ export default function PurchaseScreen(props) {
     return(
         <View>
             <Text>Credits:  {user.credit}</Text>
+            {success !== '' && (
+                <Text style={styles.success}>{success}</Text>
+            )}
              <Text style={styles.title}>Upcoming Events</Text>
             <FlatList
                 data={events}
@@ -124,4 +134,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         textAlign: 'center',
       },
+      success: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'green',
+        marginTop: 10,
+        textAlign: 'center',
+    },
 });
