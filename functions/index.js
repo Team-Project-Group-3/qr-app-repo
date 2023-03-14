@@ -160,3 +160,23 @@ exports.generateTicket = functions.https.onRequest(async (req, res) => {
       res.status(500).send(error);
     });
 });
+
+exports.resetTicket = functions.https.onRequest(async (req, res) => {
+
+  const id = req.query.id;
+  const collection = 'tickets';
+  const ticketRef = admin.firestore().collection(collection).doc(id);
+
+  used = false;
+  await ticketRef.update({
+    used: used,
+    })
+    .then(() => {
+        console.log('Document updated successfully');
+        res.send("success");
+    })
+    .catch((error) => {
+      console.error('Error updating document:', error);
+      res.send(error);
+    })
+});
