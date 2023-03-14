@@ -18,6 +18,10 @@ export default function LoginScreen({navigation}) {
         navigation.navigate('Dev')
     }
 
+    const onDev2LinkPress = () => {
+        navigation.navigate('Dev2')
+    }
+
     const onLoginPress = () => {
         firebase
             .auth()
@@ -84,6 +88,9 @@ export default function LoginScreen({navigation}) {
                 </View>
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>Go To Dev Page <Text onPress={onDevLinkPress} style={styles.footerLink}>Go To Dev Page</Text></Text>
+                </View>
+                <View style={styles.footerView}>
+                    <Text style={styles.footerText}>Go To Dev2 Page <Text onPress={onDev2LinkPress} style={styles.footerLink}>Go To Dev2 Page</Text></Text>
                 </View>
             </KeyboardAwareScrollView>
         </View>
