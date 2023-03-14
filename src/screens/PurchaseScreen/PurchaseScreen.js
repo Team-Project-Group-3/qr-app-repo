@@ -33,8 +33,9 @@ export default function PurchaseScreen(props) {
         }
     };
 
-    const buyTicket = (ticket) => {
-        
+    const buyTicket = (item) => {
+        console.log(item.id)
+        console.log(user.id)
     }
 
     return(
