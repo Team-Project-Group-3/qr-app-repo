@@ -8,6 +8,7 @@ import { Background } from '@react-navigation/elements';
 export default function AdminHomeScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+    const [color, setColor] = useState("white");
     let id = null;
     let encData = null;
     
@@ -33,6 +34,9 @@ export default function AdminHomeScreen({navigation}) {
           return(false);
         }
       };
+    function getColor() {
+        return this.color;
+    }
     const handleBarCodeScanned = async ({ type, data}) =>{
         // function to handle data scanned from QR scanner
         setScanned(true);
@@ -54,11 +58,11 @@ export default function AdminHomeScreen({navigation}) {
             console.log(`Response : ${res} Status: ${stat}`);
             if (stat === "success"){
                 console.log("verified");
-                this.color = "green";
+                setColor("#65ff15");
                 alert("Ticket valid");
             }
             else{
-                this.color = "red";
+                setColor("red");
                 console.log("verification failed");
                 alert(`Ticket invalid: ${res}`);
             }
@@ -76,11 +80,11 @@ export default function AdminHomeScreen({navigation}) {
     }
 
     return(
-        <View>
+        <View style={{backgroundColor: color}}>
             <BarCodeScanner style={styles.camera}
              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
              />
-        {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+        {scanned && <Button style={{backgroundColor: "white"}} title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
         </View>
     );
 }
