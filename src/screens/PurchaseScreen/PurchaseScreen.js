@@ -38,7 +38,8 @@ export default function PurchaseScreen(props) {
     const buyTicket = (item) => {
        ticketName = (item.id)
         userName = (user.id)
-        fetch('https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=${userName}&eventName=${ticketName}')
+        const url = `https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=${userName}&eventName=${ticketName}`;
+        fetch(url)
       .then(response => response.json())
       .then((data) => console.log(data))
       
