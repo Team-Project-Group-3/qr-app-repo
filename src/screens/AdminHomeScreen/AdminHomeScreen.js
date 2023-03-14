@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, StyleSheet } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
+import axios from 'axios';
 import styles from '../ScanningScreen/scanStyles';
+import { Background } from '@react-navigation/elements';
 
 export default function AdminHomeScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
+    let id = null;
+    let encData = null;
+    
 
     useEffect(()=> {
         const getBarCodeScannerPermissions = async () => {
@@ -16,11 +21,51 @@ export default function AdminHomeScreen({navigation}) {
 
         getBarCodeScannerPermissions();
     }, []);
-
-    const handleBarCodeScanned = ({ type, data}) =>{
+    const handleVerify = async () => {
+        try {
+            
+        } 
+        catch (error) {
+          res = response.data.response;
+          stat = response.data.status;
+          console.log(`Response : ${res} Status: ${stat}`);
+          console.error(error);
+          return(false);
+        }
+      };
+    const handleBarCodeScanned = async ({ type, data}) =>{
         // function to handle data scanned from QR scanner
         setScanned(true);
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+        verified = false;
+        try{
+            qrPayload = JSON.parse(data);
+            id = qrPayload.ticketId;
+            encData = qrPayload.encryptedData;
+        }
+        catch(err){
+            console.log("invalid payload " + err);
+        }
+        try{
+            console.log(id);
+            url = `https://us-central1-qrapp-fe2f3.cloudfunctions.net/verifyTicket?id=${id}&encData=${encData}`
+            const response = await axios.get(url);
+            res = response.data.response;
+            stat = response.data.status;
+            console.log(`Response : ${res} Status: ${stat}`);
+            if (stat === "success"){
+                console.log("verified");
+                this.color = "green";
+                alert("Ticket valid");
+            }
+            else{
+                this.color = "red";
+                console.log("verification failed");
+                alert(`Ticket invalid: ${res}`);
+            }
+        }
+        catch(err){
+            console.log(err);
+        }
     };
 
     if (hasPermission === null) {
