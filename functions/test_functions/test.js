@@ -1,6 +1,6 @@
 const crypto = require("crypto")
 
-function hashGen(text){
+function hashGen(text) {
   let rawHash = crypto.createHash('sha256');
   rawHash.update(text);
   let hash = rawHash.digest('hex');
@@ -8,20 +8,20 @@ function hashGen(text){
   return hash;
 }
 
-function randomStringGen(){
+function randomStringGen() {
   let c = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  let  result = "";
-  for(let i = 0; i < 16; i++){
-    result += c.charAt(Math.floor(Math.random()*c.length));
+  let result = "";
+  for (let i = 0; i < 16; i++) {
+    result += c.charAt(Math.floor(Math.random() * c.length));
   }
   return result;
 }
 
-function createEvent(eventName){
+function createEvent(eventName) {
   const createEvent = db.collection("events").doc(eventName).collection("Tickets");
   const numberOfTickets = 100;
-  for(i=1;i<numberOfTickets+1;i++){
-    let ticketNumber = "Ticket "+i;
+  for (i = 1; i < numberOfTickets + 1; i++) {
+    let ticketNumber = "Ticket " + i;
     console.log(ticketNumber);
     let createTickets = createEvent.doc(ticketNumber);
     createTickets.set({
@@ -31,13 +31,13 @@ function createEvent(eventName){
 }
 
 
-function encryptData(data, algo, key, inVec){
+function encryptData(data, algo, key, inVec) {
   const cipher = crypto.createCipheriv(algo, key, inVec);
   let encryptedData = Buffer.from(cipher.update(data, 'utf-8', 'hex') + cipher.final('hex')).toString('base64');
   return encryptedData;
 }
 
-function decryptData(data, algo, k, iv){
+function decryptData(data, algo, k, iv) {
   try {
     const decipher = crypto.createDecipheriv(algo, k, iv);
     const buff = Buffer.from(data, 'base64');
@@ -102,7 +102,7 @@ function decryptData(data, algo, k, iv){
 //    })
 //
 //}
- 
+
 
 // //   const jsonData = JSON.stringify(ticket.data());
 // //   return jsonData
