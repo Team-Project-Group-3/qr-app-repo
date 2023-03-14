@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, StyleSheet, Pressable } from 'react-native'
+import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, StyleSheet, Pressable, ActivityIndicator } from 'react-native'
 import NavButton from '../../Components/NavButton'
 import { firebase } from '../../firebase/config'
 
@@ -9,6 +9,7 @@ export default function PurchaseScreen(props) {
     const eventsRef = firebase.firestore().collection('events');
 
     const user = props.extraData
+    const [isLoading, setIsLoading] = useState(false);
     
     const [events, setEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
@@ -39,6 +40,7 @@ export default function PurchaseScreen(props) {
     const buyTicket = (item) => {
        ticketName = (item.id)
         userName = (user.id)
+        setIsLoading(true);
         const url = `https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=${userName}&eventName=${ticketName}`;
         fetch(url)
       .then(response => response.json())
@@ -48,7 +50,8 @@ export default function PurchaseScreen(props) {
     })
     .catch(error => {
         console.log('Error: ', error );
-    });
+    })
+    .finally(() => setIsLoading(false));
       
       /*
       .then(data => setTicket(data))
@@ -64,6 +67,7 @@ export default function PurchaseScreen(props) {
                 <Text style={styles.success}>{success}</Text>
             )}
              <Text style={styles.title}>Upcoming Events</Text>
+             {isLoading && <ActivityIndicator />}
             <FlatList
                 data={events}
                 keyExtractor={(item) => item.id}
