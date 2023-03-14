@@ -126,7 +126,7 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
           "response": "an error occured while changing the isUsed property"
         });
       }
-      
+
     } else {
       res.json({
         "status": "unsuccessful",
@@ -141,15 +141,15 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
   }
 });
 
-
 exports.generateTicket = functions.https.onRequest(async (req, res) => {
   // request contains uid, eventName
   let ticketInfo = req.query;
 
   // add cost (lookup eventName), ticketSecret (hashgen), used=false, owner = uid, add ticketid to uid ticketsOwned array
   ticketInfo.used = false;
-  ticketInfo.cost = (await admin.firestore().collection('events').doc(ticketInfo.eventName).get()).data().cost;
-  ticketInfo.ticketSecret = hashGen(randomStringGen);
+  const eventDoc = await admin.firestore().collection('events').doc(ticketInfo.eventName).get();
+  ticketInfo.cost = eventDoc.data().cost;
+  ticketInfo.ticketSecret = hashGen(randomStringGen());
 
   await admin.firestore().collection('tickets').add(ticketInfo)
     .then(() => {
