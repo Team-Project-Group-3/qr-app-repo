@@ -153,6 +153,7 @@ exports.generateTicket = functions.https.onRequest(async (req, res) => {
 
   await admin.firestore().collection('tickets').add(ticketInfo)
     .then(() => {
+      delete ticketInfo.ticketSecret;
       res.json({ ticketInfo })
     })
     .catch((error) => {
