@@ -2,7 +2,9 @@ node_modules/
 .idea/
 .expo/
 dist/
+.idea/
 npm-debug.*
+*.lock
 *.jks
 *.p8
 *.p12

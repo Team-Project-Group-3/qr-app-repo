@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import styles from './styles';
+import styles from '../../styles';
 import { firebase } from '../../firebase/config'
 import { usePreventScreenCapture } from 'expo-screen-capture';
 
@@ -39,7 +39,8 @@ export default function LoginScreen({navigation}) {
                         }
                         const user = firestoreDocument.data()
 
-                        navigation.navigate('Home', {user})
+                        if(user.isVerifier) navigation.navigate('AdminHome', {user})
+                        else navigation.navigate('UserHome', {user})
                     })
                     .catch(error => {
                         alert(error)
@@ -79,18 +80,19 @@ export default function LoginScreen({navigation}) {
                     autoCapitalize="none"
                 />
                 <TouchableOpacity
-                    style={styles.button}
+                    style={styles.loginButton}
                     onPress={() => onLoginPress()}>
                     <Text style={styles.buttonTitle}>Log in</Text>
                 </TouchableOpacity>
                 <View style={styles.footerView}>
-                    <Text style={styles.footerText}>Don't have an account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text></Text>
+                    <Text style={styles.footerText}>No account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text></Text>
                 </View>
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>Go to <Text onPress={onDevLinkPress} style={styles.footerLink}>Buy Ticket Dev Page</Text></Text>
                 </View>
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>Go to <Text onPress={onDev2LinkPress} style={styles.footerLink}>QR Code Tester Dev Page</Text></Text>
+                    <Text onPress={onDevLinkPress} style={styles.footerLink}>Go To Dev Page</Text>
                 </View>
             </KeyboardAwareScrollView>
         </View>
