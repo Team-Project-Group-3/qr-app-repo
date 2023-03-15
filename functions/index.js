@@ -1,6 +1,6 @@
 const functions = require('firebase-functions');
 const crypto = require('crypto');
-const { encryptData, decryptData, hashGen, randomStringGen } = require('./services/services');
+const { encryptData, decryptData, hashGen, randomStringGen } = require('./src/services/services');
 const admin = require('firebase-admin');
 
 admin.initializeApp();
