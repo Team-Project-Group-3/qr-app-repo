@@ -50,19 +50,12 @@ export default function DevScreen(props) {
         `https://us-central1-qrapp-fe2f3.cloudfunctions.net/getTicket?id=${id}`
       );
       setTicketData(response.data);
+      console.log((response.data.qrPayload));
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    if (data && data.ticketExists === 'true') {
-      getTicketData(id);
-    } else {
-      setTicketData(null);
-    }
-  }, [data]);
-
+  
   return (
     <View style={{ flex: 1, paddingHorizontal: 20 }}>
       <View style={{ marginTop: 60, alignItems: 'center', textAlign: 'center'}}>
