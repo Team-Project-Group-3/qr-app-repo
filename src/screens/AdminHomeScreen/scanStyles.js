@@ -6,9 +6,12 @@ export default StyleSheet.create({
       justifyContent: 'center',
     },
     camera: {
+      borderWidth: 5,
+      borderColor: "white",
+      alignSelf:"center",
       height: 400,
-      width: 400,
-      marginVertical: 50,
+      width: "100%",
+      marginVertical: 1,
       padding: 20,
     },
     buttonContainer: {
@@ -18,10 +21,17 @@ export default StyleSheet.create({
       margin: 64,
     },
     button: {
-      flex: 1,
-      alignSelf: 'flex-end',
-      alignItems: 'center',
-    },
+      height: 47,
+      borderRadius: 5,
+      backgroundColor: '#788eec',
+      width: 80,
+      alignSelf: "center",
+      justifyContent: 'center'
+  },
+  buttonText: {
+      color: 'white',
+      fontSize: 16
+  },
     text: {
       fontSize: 24,
       fontWeight: 'bold',

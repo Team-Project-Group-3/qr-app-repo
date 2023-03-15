@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, StyleSheet } from 'react-native'
+import { Text, View, Button } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import axios from 'axios';
 import styles from './scanStyles';
-import { Background } from '@react-navigation/elements';
+import CustomButton from './ButtonPressable';
 
 export default function AdminHomeScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(null);
@@ -22,21 +22,7 @@ export default function AdminHomeScreen({navigation}) {
 
         getBarCodeScannerPermissions();
     }, []);
-    const handleVerify = async () => {
-        try {
-            
-        } 
-        catch (error) {
-          res = response.data.response;
-          stat = response.data.status;
-          console.log(`Response : ${res} Status: ${stat}`);
-          console.error(error);
-          return(false);
-        }
-      };
-    function getColor() {
-        return this.color;
-    }
+
     const handleBarCodeScanned = async ({ type, data}) =>{
         // function to handle data scanned from QR scanner
         setScanned(true);
@@ -80,11 +66,19 @@ export default function AdminHomeScreen({navigation}) {
     }
 
     return(
-        <View style={{backgroundColor: color}}>
-            <BarCodeScanner style={styles.camera}
+        <View>
+            <BarCodeScanner style={{
+                borderWidth: 10,
+                borderColor: color,
+                alignSelf:"center",
+                height: 400,
+                width: "100%",
+                marginVertical: 1,
+                padding: 20,
+                }}
              onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
              />
-        {scanned && <Button style={{backgroundColor: "white"}} title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+        {scanned && <CustomButton onPress={() => setScanned(false)} title={"Press to scan again"}/>}
         </View>
     );
 }
