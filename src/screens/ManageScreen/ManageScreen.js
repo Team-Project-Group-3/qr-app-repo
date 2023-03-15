@@ -12,7 +12,7 @@ export default function ManageScreen(props) {
 
   const { data } = useData(user_tickets)
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedTicket, setSelectedTicket] = useData()
+  const [selectedTicket, setSelectedTicket] = useState()
 
   useEffect(() => {
     props.navigation.setOptions({ headerTitle: "Manage Tickets", });
@@ -35,7 +35,8 @@ export default function ManageScreen(props) {
         
           return(
             <View style={styles.tabContainer}>
-              <FlatList data={activeTickets} renderItem={({item}) => <TicketEntry handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={item} />}/>
+              <FlatList data={activeTickets} renderItem={({item}) => <TicketEntry handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={item}
+              handleTicket={(ticket) => setSelectedTicket(ticket)}/>}/>
             </View>
           )
         }}/>
@@ -47,7 +48,8 @@ export default function ManageScreen(props) {
 
           return(
             <View style={styles.tabContainer}>
-              <FlatList data={usedTickets} renderItem={({item}) => <TicketEntry handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={item} />}/>
+              <FlatList data={usedTickets} renderItem={({item}) => <TicketEntry handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={item}
+              handleTicket={(ticket) => setSelectedTicket(ticket)}/>}/>
             </View>
           )
         }}/>
@@ -56,7 +58,7 @@ export default function ManageScreen(props) {
   )
 }
 
-const TicketEntry = ({handleState, ticket}) => (
+const TicketEntry = ({handleState, ticket, handleTicket}) => (
   <View style={styles.ticketEntry}>
     <Pressable style={({ pressed }) => [
       {
@@ -66,7 +68,7 @@ const TicketEntry = ({handleState, ticket}) => (
       },
       styles.ticketButton]}
       onPress={() => {
-        setSelectedTicket(ticket)
+        handleTicket(ticket)
         handleState(true)
       }}>
       <Text style={styles.ticketText}>{ticket.event}</Text>
@@ -74,33 +76,35 @@ const TicketEntry = ({handleState, ticket}) => (
   </View> 
 );
 
-const TicketPopup = ({state, handleState, ticket}) => (
-  <Modal
-    animationType="slide"
-    transparent={true}
-    visible={state}
-    onRequestClose={() => {
-      Alert.alert('Modal has been closed.');
-      handleState(!state);
-    }}>
-    <View style={styles.centeredView}>
-      <View style={styles.modalView}>
-        <Text style={styles.modalText}>Hello World!</Text>
-        <Text style={styles.modalText}>ticket.encryptedData</Text>
-        <Text style={styles.modalText}>ticket.cost</Text>
-        <Text style={styles.modalText}>ticket.event</Text>
-        {/*}
-        <QRCode value={JSON.stringify(data.qrPayload)} size={250} color="black"/>
-        {*/}
-        <Pressable
-          style={[styles.button, styles.buttonClose]}
+const TicketPopup = ({state, handleState, ticket}) => {
+  return(
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={state}
+      onRequestClose={() => {
+        Alert.alert('Modal has been closed.');
+        handleState(!state);
+      }}>
+      <View style={styles.centeredView}>
+        {!ticket ?
+          <ActivityIndicator size="large" color="#00C6D2"/>
+          :
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>{ticket.event}</Text>
+            <Text style={styles.modalText}>{ticket.cost}</Text>
+            <Text style={styles.modalText}>{ticket.event}</Text>
+            <QRCode value={JSON.stringify(ticket.encryptedData)} size={250} color="black"/>
+          </View>
+        }
+        <Pressable style={[styles.button, styles.buttonClose]}
           onPress={() => handleState(!state)}>
           <Text style={styles.textStyle}>Hide Modal</Text>
         </Pressable>
       </View>
-    </View>
-  </Modal>
-);
+    </Modal>
+  )
+}
 
 function GetActiveTickets(tickets)
 {
