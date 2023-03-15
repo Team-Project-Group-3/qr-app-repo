@@ -3,7 +3,7 @@ import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button } f
 import styles from './styles';
 import { firebase } from '../../firebase/config'
 import LoginScreen from '../LoginScreen/LoginScreen';
-import NavButton from '../../Components/NavButton';
+import NavButton from '../../components/NavButton';
 
 export default function HomeScreen(props) {
 

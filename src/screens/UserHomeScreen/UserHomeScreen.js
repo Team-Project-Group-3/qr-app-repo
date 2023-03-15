@@ -1,5 +1,5 @@
 import { Text, View } from 'react-native'
-import NavButton from '../../Components/NavButton';
+import NavButton from '../../components/NavButton';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from '../../styles';
 

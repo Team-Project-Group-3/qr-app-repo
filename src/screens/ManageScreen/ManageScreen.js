@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Pressable, Alert, Modal, FlatList, Text, View, Button, ActivityIndicator } from 'react-native'
-import NavButton from '../../Components/NavButton'
+import NavButton from '../../components/NavButton'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import styles from '../../styles'
 

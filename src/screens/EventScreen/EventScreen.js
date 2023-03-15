@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, StyleSheet, Pressable } from 'react-native'
-import NavButton from '../../Components/NavButton'
+import NavButton from '../../components/NavButton'
 import { firebase } from '../../firebase/config'
 
 
