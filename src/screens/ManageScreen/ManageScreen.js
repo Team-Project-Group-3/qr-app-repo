@@ -20,6 +20,8 @@ export default function ManageScreen(props) {
 
   const Tab = createMaterialTopTabNavigator();
 
+  if(!user_tickets) return <Text>NO TICKETS FOR USER</Text>
+
   return(
     <View style={styles.tabContainer}>
       <TicketPopup state={modalVisible} handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={selectedTicket}/>
