@@ -1,46 +1,182 @@
-const functions = require("firebase-functions");
-
-// The Firebase Admin SDK to access Firestore.
+const functions = require('firebase-functions');
+const crypto = require('crypto');
+const { encryptData, decryptData, hashGen, randomStringGen } = require('./test_functions/test');
 const admin = require('firebase-admin');
+
 admin.initializeApp();
+const algo = 'aes-256-cbc';
 
-// // Create and deploy your first functions
-// // https://firebase.google.com/docs/functions/get-started
-//
-
- // Take the text parameter passed to this HTTP endpoint and insert it into 
-// Firestore under the path /messages/:documentId/original
-exports.addMessage = functions.https.onRequest(async (req, res) => {
-  // Grab the text parameter.
-  const original = req.query.text;
-  // Push the new message into Firestore using the Firebase Admin SDK.
-  const writeResult = await admin.firestore().collection('messages').add({original: original});
-  // Send back a message that we've successfully written the message
-  res.json({result: `Message with ID: ${writeResult.id} added.`});
-});
-
-// Encryption Function
-exports.encryptTicket = functions.https.onRequest(async (req, res) => {
-
-  const collection = 'tickets'
+exports.getTicket = functions.https.onRequest(async (req, res) => {
 
   const id = req.query.id;
+  const collection = 'tickets';
+  const ticketRef = admin.firestore().collection(collection).doc(id);
+  const ticket = await ticketRef.get();
+  const key = crypto.randomBytes(32);
+  const inVec = crypto.randomBytes(16);
 
-  // const algo = 'aes-256-cbc';
-  // const key = crypto.randomBytes(32);
-  // const inVec = crypto.randomBytes(16);
+  if (!ticket.exists) {
+    res.send({ "ticketExists": "false" });
+  }
 
+  const payload = {
+    "ticketSecret": ticket._fieldsProto.ticketSecret.stringValue,
+    "timestamp": Date.now()
+  }
+
+  const encData = encryptData(JSON.stringify(payload), algo, key, inVec);
+
+  const qrPayload = {
+    "encryptedData": encData,
+    "ticketId": id
+  }
+
+  const ticketMeta = {
+    "cost": ticket._fieldsProto.cost,
+    "owner": ticket._fieldsProto.uid,
+    "event": ticket._fieldsProto.eventName,
+    "seatNumber": ticket._fieldsProto.seatNumber,
+    "used": ticket._fieldsProto.used
+  }
+
+  ticketRef.update({
+    key: key,
+    iv: inVec
+  })
+    .then(() => {
+      console.log('Document updated successfully');
+    })
+    .catch((error) => {
+      console.error('Error updating document:', error);
+    });
+
+  const messagePayload = {
+    "qrPayload": qrPayload,
+    "ticketMeta": ticketMeta,
+    "ticketExists": "true"
+  }
+
+  res.json(messagePayload);
+});
+
+exports.verifyTicket = functions.https.onRequest(async (req, res) => {
+
+  const id = req.query.id;
+  const encData = req.query.encData;
+  const collection = 'tickets';
   const ticketRef = admin.firestore().collection(collection).doc(id);
   const ticket = await ticketRef.get();
 
   if (!ticket.exists) {
-    res.send('Ticket does not exist');
+    res.json({
+      "status": "unsuccessful",
+      "response": "ticket does not exist"
+    });
   }
 
-  // const jsonData = JSON.stringify(ticket.data());
+  try {
+    const key = ticket._fieldsProto.key.bytesValue;
+    const inVec = ticket._fieldsProto.iv.bytesValue;
+    const decData = decryptData(encData, algo, key, inVec);
+    const decJSON = JSON.parse(decData.data);
+    const trueSecret = ticket._fieldsProto.ticketSecret.stringValue;
+    const sentSecret = decJSON.ticketSecret;
+    const currentTime = Date.now();
+    const qrTime = decJSON.timestamp;
+    const difference = currentTime - qrTime;
+    const timeWindow = 60000;
 
-  const jsonData = {"test":ticket._fieldsProto};
-  
-  res.json(jsonData);
+    if (decJSON.status == 'error') {
+      res.json({
+        "status": "unsuccessful",
+        "response": "invalid ticket"
+      });
+    }
+    if (trueSecret != sentSecret) {
+      res.json({
+        "status": "unsuccessful",
+        "response": "invalid ticket"
+      });
+    }
+    if (ticket._fieldsProto.used.booleanValue) {
+      res.json({
+        "status": "unsuccessful",
+        "response": "ticket already used",
+      });
+    }
+    if (difference <= timeWindow) {
+      used = true;
+      try {
+        ticketRef.update({
+          used: used,
+        })
+          .then(() => {
+            console.log('Document updated successfully');
+          })
+          .catch((error) => {
+            console.error('Error updating document:', error);
+          })
+        res.json({
+          "status": "success",
+          "response": "ticket valid"
+        });
+      } catch (error) {
+        res.json({
+          "status": "unsuccessful",
+          "response": "an error occured while changing the isUsed property"
+        });
+      }
 
+    } else {
+      res.json({
+        "status": "unsuccessful",
+        "response": "expired"
+      });
+    }
+  } catch (error) {
+    res.json({
+      "status": "failure",
+      "response": "unable to decrypt"
+    });
+  }
+});
+
+exports.generateTicket = functions.https.onRequest(async (req, res) => {
+  // request contains uid, eventName
+  let ticketInfo = req.query;
+
+  // add cost (lookup eventName), ticketSecret (hashgen), used=false, owner = uid, add ticketid to uid ticketsOwned array
+  ticketInfo.used = false;
+  const eventDoc = await admin.firestore().collection('events').doc(ticketInfo.eventName).get();
+  ticketInfo.cost = eventDoc.data().cost;
+  ticketInfo.ticketSecret = hashGen(randomStringGen());
+
+  await admin.firestore().collection('tickets').add(ticketInfo)
+    .then(() => {
+      delete ticketInfo.ticketSecret;
+      res.json({ ticketInfo })
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+});
+
+exports.resetTicket = functions.https.onRequest(async (req, res) => {
+
+  const id = req.query.id;
+  const collection = 'tickets';
+  const ticketRef = admin.firestore().collection(collection).doc(id);
+
+  used = false;
+  await ticketRef.update({
+    used: used,
+    })
+    .then(() => {
+        console.log('Document updated successfully');
+        res.send("success");
+    })
+    .catch((error) => {
+      console.error('Error updating document:', error);
+      res.send(error);
+    })
 });

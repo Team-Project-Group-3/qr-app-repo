@@ -3,14 +3,16 @@ import React, { useEffect, useState } from 'react'
 import { firebase } from './src/firebase/config'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
-import { LoginScreen, HomeScreen, RegistrationScreen, DevScreen} from './src/screens'
+import { LoginScreen, HomeScreen, RegistrationScreen, DevScreen, DevScreen2} from './src/screens'
 import {decode, encode} from 'base-64'
+import { usePreventScreenCapture } from 'expo-screen-capture';
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
 
 const Stack = createStackNavigator();
 
 export default function App() {
+  usePreventScreenCapture();
 
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
@@ -48,7 +50,8 @@ export default function App() {
         {
           <>
             <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="Dev" component={DevScreen} />
+            <Stack.Screen name="Buy Ticket" component={DevScreen} />
+            <Stack.Screen name="QR Code Tester" component={DevScreen2} />
             <Stack.Screen name="Registration" component={RegistrationScreen} />
             <Stack.Screen name="Home">
                         {props => <HomeScreen {...props} extraData={user} />}

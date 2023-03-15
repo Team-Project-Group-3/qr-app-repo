@@ -52,14 +52,5 @@ export default StyleSheet.create({
     entityText: {
         fontSize: 20,
         color: '#333333'
-    },
-    buttonContainer: {
-        borderRadius: 20,
-        overflow: 'hidden',
-        marginHorizontal: 50,
-        marginTop: 20
-      },
-      buttonText: {
-        textAlign: 'center'
-      }
+    }
 })

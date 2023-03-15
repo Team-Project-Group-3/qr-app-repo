@@ -1,56 +1,50 @@
-import React, { useEffect, useState } from 'react'
-import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button } from 'react-native'
-import styles from './styles';
-import { firebase } from '../../firebase/config'
+import React, { useEffect, useState } from 'react';
+import { View, Button, StyleSheet } from 'react-native';
+import { SelectList } from 'react-native-dropdown-select-list';
 import axios from 'axios';
-import QRCode from 'react-native-qrcode-svg';
 
 export default function DevScreen(props) {
-  const [data, setData] = useState(null);
-  const [data2, setData2] = useState(null);
-  const [data3, setData3] = useState(null);
+  const [selected, setSelected] = useState('');
 
-  const handleClick = async () => {
-    try {
-      const response = await axios.get(
-        'https://us-central1-qrapp-fe2f3.cloudfunctions.net/encryptTicket?id=1'
-      );
-      setData(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const eventPlaceholder = [
+    { key: '1', value: 'Parklife' },
+    { key: '2', value: 'Leeds Festival' },
+    { key: '3', value: 'Elon Musk Convention' },
+    { key: '4', value: 'Bloodstock 2023' }
+  ]
 
-  const handleClick2 = async () => {
-    try {
-      const response = await axios.get(
-        'https://us-central1-qrapp-fe2f3.cloudfunctions.net/encryptTicket?id=2'
-      );
-      setData2(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleClick3 = async () => {
-    try {
-      const response = await axios.get(
-        'https://us-central1-qrapp-fe2f3.cloudfunctions.net/encryptTicket?id=test'
-      );
-      setData3(response.data);
-    } catch (error) {
-      console.error(error);
-    }
+  const sendTicketGeneration = async () => {
+    await axios.get(`https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=123&eventName=${selected}`)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   return (
     <View>
-      <Button title="Show Ticket id = 1" onPress={handleClick} />
-      {data && <QRCode value={JSON.stringify(data)} size={200} />}
-      <Button title="Show Ticket id = 2" onPress={handleClick2} />
-      {data2 && <QRCode value={JSON.stringify(data2)} size={200} />}
-      <Button title="Show Ticket id = 3" onPress={handleClick3} />
-      {data3 && <QRCode value={JSON.stringify(data3)} size={200} />}
+      <SelectList
+        setSelected={setSelected}
+        data={eventPlaceholder}
+        save='value'
+      />
+      <View style={styles.buttonContainer}>
+        <Button title="Buy Ticket" onPress={sendTicketGeneration} />
+      </View>
     </View>
-  );
+  )
 }
+
+const styles = StyleSheet.create({
+  buttonContainer: {
+    borderRadius: 20,
+    overflow: 'hidden',
+    marginHorizontal: 50,
+    marginTop: 20
+  },
+  buttonText: {
+    textAlign: 'center'
+  }
+});
