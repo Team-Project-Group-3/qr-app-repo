@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { Pressable, Alert, Modal, FlatList, Text, View, Button, ActivityIndicator } from 'react-native'
 import NavButton from '../../components/NavButton'
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import styles from '../../styles'
+import QRCode from 'react-native-qrcode-svg'
 
 export default function ManageScreen(props) {
 
@@ -11,6 +12,7 @@ export default function ManageScreen(props) {
 
   const { data } = useData(user_tickets)
   const [modalVisible, setModalVisible] = useState(false);
+  const [selectedTicket, setSelectedTicket] = useData()
 
   useEffect(() => {
     props.navigation.setOptions({ headerTitle: "Manage Tickets", });
@@ -20,7 +22,7 @@ export default function ManageScreen(props) {
 
   return(
     <View style={styles.tabContainer}>
-      <TicketPopup state={modalVisible} handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={data}/>
+      <TicketPopup state={modalVisible} handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={selectedTicket}/>
       <Tab.Navigator screenOptions={({ route }) =>({
         tabBarActiveTintColor: '#00C6D2',
         tabBarInactiveTintColor: 'gray',
@@ -63,7 +65,10 @@ const TicketEntry = ({handleState, ticket}) => (
               : "#00C6D2",
       },
       styles.ticketButton]}
-      onPress={() => handleState(true)}>
+      onPress={() => {
+        setSelectedTicket(ticket)
+        handleState(true)
+      }}>
       <Text style={styles.ticketText}>{ticket.event}</Text>
     </Pressable>
   </View> 
@@ -81,6 +86,12 @@ const TicketPopup = ({state, handleState, ticket}) => (
     <View style={styles.centeredView}>
       <View style={styles.modalView}>
         <Text style={styles.modalText}>Hello World!</Text>
+        <Text style={styles.modalText}>ticket.encryptedData</Text>
+        <Text style={styles.modalText}>ticket.cost</Text>
+        <Text style={styles.modalText}>ticket.event</Text>
+        {/*}
+        <QRCode value={JSON.stringify(data.qrPayload)} size={250} color="black"/>
+        {*/}
         <Pressable
           style={[styles.button, styles.buttonClose]}
           onPress={() => handleState(!state)}>

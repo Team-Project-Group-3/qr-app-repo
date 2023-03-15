@@ -7,6 +7,7 @@ const NavButton = ({ page, label, navigation }) => {
     const handlePress = () => {
       navigation.navigate(page);
     };
+    
   
     return (
       <Pressable
