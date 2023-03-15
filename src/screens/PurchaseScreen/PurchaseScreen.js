@@ -63,9 +63,13 @@ export default function PurchaseScreen(props) {
     return(
         <View>
             <Text>Credits:  {user.credit}</Text>
+
+
             {success !== '' && (
                 <Text style={styles.success}>{success}</Text>
             )}
+
+
              <Text style={styles.title}>Upcoming Events</Text>
              {isLoading && <ActivityIndicator />}
             <FlatList
@@ -98,15 +102,16 @@ export default function PurchaseScreen(props) {
 }
 const styles = StyleSheet.create({
     Events: {
-        borderBottomWidth: 2,
-        borderColor: 'gray',
         paddingVertical: 10,
         paddingHorizontal: 10,
+        borderBottomWidth: 2,
+        borderColor: 'gray',
+        
     },
     Name: {
         fontSize: 18,
-        fontWeight: 'bold',
         marginBottom: 5,
+        fontWeight: 'bold',
     },
     Details: {
         marginTop: 10,
@@ -116,20 +121,20 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     button: {
-        borderRadius: 15,
+        position: 'relative',
+        height: 22,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 14,
         backgroundColor: '#00C6D2',
         marginTop: 45,
-        position: 'relative',
-        height: 20,
-        alignItems: 'center',
-        justifyContent: 'center'
     },
     text: {
         fontSize: 12,
         lineHeight: 21,
         fontWeight: 'bold',
         letterSpacing: 0.25,
-        color: 'white',
+        color: 'rgb(255,255,255)',
     },
     title: {
         fontSize: 20,
@@ -138,9 +143,9 @@ const styles = StyleSheet.create({
         textAlign: 'center',
       },
       success: {
-        fontSize: 16,
+        fontSize: 20,
         fontWeight: 'bold',
-        color: 'green',
+        color: 'rgb(73,252,3)',
         marginTop: 10,
         textAlign: 'center',
     },
