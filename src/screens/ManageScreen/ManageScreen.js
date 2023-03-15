@@ -1,23 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { SafeAreaView, StatusBar, StyleSheet, FlatList, SectionList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, ActivityIndicator } from 'react-native'
+import { Pressable, Alert, Modal, SafeAreaView, StatusBar, StyleSheet, FlatList, SectionList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, ActivityIndicator } from 'react-native'
 import NavButton from '../../Components/NavButton'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 export default function ManageScreen(props) {
 
-  const [refresh, setRefresh] = useState(true);
-
   const user = props.extraData
   const user_tickets = user.ticketsOwned
 
-  var activeTickets = undefined
-  var usedTickets = []
-
-  const activeTicketsCombined = {title: "Active", data: []}
-  const usedTicketsCombined = {title: "Used", data: []}
-  var allTickets = []
-
   const { data } = useData(user_tickets)
+  const [modalVisible, setModalVisible] = useState(false);
 
   /*
   FetchTickets(user_tickets)
@@ -50,41 +42,26 @@ export default function ManageScreen(props) {
   })
   .catch(error => error)
   */
-  
 
   useEffect(() => {
     props.navigation.setOptions({ headerTitle: "Manage Tickets", });
   }, []);
 
-  //if(!data) return <ActivityIndicator size="large" />;
-
-  //const ticketNames = []
-  //data.forEach(ticket => {
-  //  ticketNames.push(ticket.ticketMeta.event.stringValue)
-  //});
-
   const Tab = createMaterialTopTabNavigator();
 
   return(
     <View style={styles.container}>
+      <TicketPopup state={modalVisible} handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={data}/>
       <Tab.Navigator>
         <Tab.Screen name="Active" children={()=>
         {
           if(!data) return <ActivityIndicator size="large" color="#123123"/>;
 
-          /*
-          const ticketNames = []
-          data.forEach(ticket => {
-            console.log(ticket)
-            ticketNames.push(ticket.ticketMeta.event.stringValue)
-          });
-          */
-
           const activeTickets = GetActiveTickets(data)
         
           return(
             <View style={styles.container}>
-              <FlatList data={activeTickets.eventNames} renderItem={({item}) => (<Item title={item}/>)}/>
+              <FlatList data={activeTickets} renderItem={({item}) => <TicketEntry handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={item} />}/>
             </View>
           )
         }}/>
@@ -93,10 +70,10 @@ export default function ManageScreen(props) {
           if(!data) return <ActivityIndicator size="large" color="#123123"/>;
 
           const usedTickets = GetUsedTickets(data)
-        
+
           return(
             <View style={styles.container}>
-              <FlatList data={usedTickets.eventNames} renderItem={({item}) => (<Item title={item}/>)}/>
+              <FlatList data={usedTickets} renderItem={({item}) => <TicketEntry handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={item} />}/>
             </View>
           )
         }}/>
@@ -105,9 +82,37 @@ export default function ManageScreen(props) {
   )
 }
 
+const TicketEntry = ({handleState, ticket}) => (
+  <View style={styles.item}>
+    <Button title={ticket.event} onPress={() => handleState(true)}/>
+  </View> 
+);
+
+const TicketPopup = ({state, handleState, ticket}) => (
+  <Modal
+    animationType="slide"
+    transparent={true}
+    visible={state}
+    onRequestClose={() => {
+      Alert.alert('Modal has been closed.');
+      handleState(!state);
+    }}>
+    <View style={styles.centeredView}>
+      <View style={styles.modalView}>
+        <Text style={styles.modalText}>Hello World!</Text>
+        <Pressable
+          style={[styles.button, styles.buttonClose]}
+          onPress={() => handleState(!state)}>
+          <Text style={styles.textStyle}>Hide Modal</Text>
+        </Pressable>
+      </View>
+    </View>
+  </Modal>
+);
+
 function GetActiveTickets(tickets)
 {
-  const activeTickets = {tickets: [], eventNames: []}
+  activeTickets = []
   tickets.forEach(ticket => {
     if(!ticket.ticketMeta.used.booleanValue)
       {
@@ -116,8 +121,7 @@ function GetActiveTickets(tickets)
           cost: ticket.ticketMeta.cost.integerValue,
           event: ticket.ticketMeta.event.stringValue,
         }
-        activeTickets.tickets.push(newTicket)
-        activeTickets.eventNames.push(ticket.ticketMeta.event.stringValue)
+        activeTickets.push(newTicket)
       }
   });
   return activeTickets
@@ -125,7 +129,7 @@ function GetActiveTickets(tickets)
 
 function GetUsedTickets(tickets)
 {
-  const usedTickets = {tickets: [], eventNames: []}
+  const usedTickets = []
   tickets.forEach(ticket => {
     if(ticket.ticketMeta.used.booleanValue)
       {
@@ -134,8 +138,7 @@ function GetUsedTickets(tickets)
           cost: ticket.ticketMeta.cost.integerValue,
           event: ticket.ticketMeta.event.stringValue,
         }
-        usedTickets.tickets.push(newTicket)
-        usedTickets.eventNames.push(ticket.ticketMeta.event.stringValue)
+        usedTickets.push(newTicket)
       }
   });
   return usedTickets
@@ -143,6 +146,8 @@ function GetUsedTickets(tickets)
 
 export const useData = (user_tickets) => {
   const [state, setState] = useState();
+
+  console.log("GETTING TICKETS!!!!")
 
   useEffect(() => {
     const dataFetch = async () => {
@@ -164,21 +169,6 @@ export const useData = (user_tickets) => {
   return { data: state };
 };
 
-const FetchTickets = async (user_tickets) => {
-  try {
-    var urls = []
-    user_tickets.forEach(ticket => {
-      urls.push('https://us-central1-qrapp-fe2f3.cloudfunctions.net/getTicket?id=' + ticket)
-    });
-    const responsesJSON = await Promise.all(urls.map(url =>
-      fetch(url)
-    ))
-    return ticketResponses = await Promise.all(responsesJSON.map(r => r.json()));
-  } catch (err) {
-    throw err;
-  }
-};
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -192,18 +182,25 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 35,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
 });
-
-const Item = ({title}) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-  </View>
-);
-
-function TicketEntry(title) {
-  return(
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
-  )
-}
