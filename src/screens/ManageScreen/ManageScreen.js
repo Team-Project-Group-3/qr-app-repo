@@ -16,13 +16,15 @@ export default function ManageScreen(props) {
     props.navigation.setOptions({ headerTitle: "Manage Tickets", });
   }, []);
 
-  const Tab = createMaterialTopTabNavigator({tabBarOptions: {activeTintColor: "#000000"}});
-  const TabNav = Tab.Navigator;
+  const Tab = createMaterialTopTabNavigator();
 
   return(
     <View style={styles.tabContainer}>
       <TicketPopup state={modalVisible} handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={data}/>
-      <TabNav options={{}}>
+      <Tab.Navigator screenOptions={({ route }) =>({
+        tabBarActiveTintColor: '#00C6D2',
+        tabBarInactiveTintColor: 'gray',
+        tabBarIndicatorStyle: {backgroundColor: '#00C6D2'}})}>
         <Tab.Screen name="Active" children={()=>
         {
           if(!data) return <ActivityIndicator size="large" color="#00C6D2"/>;
@@ -47,7 +49,7 @@ export default function ManageScreen(props) {
             </View>
           )
         }}/>
-      </TabNav>
+      </Tab.Navigator>
     </View>
   )
 }
