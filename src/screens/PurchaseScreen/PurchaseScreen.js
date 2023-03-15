@@ -118,7 +118,6 @@ const styles = StyleSheet.create({
     },
     TextDetails: {
         fontSize: 12,
-        fontWeight: 'bold',
     },
     button: {
         position: 'relative',
