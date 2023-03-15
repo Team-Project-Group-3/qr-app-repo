@@ -26,9 +26,9 @@ export default StyleSheet.create({
         marginRight: 30,
         paddingLeft: 16
     },
-    buttonTitle: {
+    buttonText: {
         color: 'white',
-        fontSize: 16,
+        fontSize: 22,
         fontWeight: "bold"
     },
     footerView: {
@@ -46,12 +46,13 @@ export default StyleSheet.create({
         fontSize: 16
     },
     button: {
-        borderRadius: 15,
         backgroundColor: '#00C6D2',
-        marginTop: 45,
-        position: 'relative',
-        height: 100,
-        alignItems: 'center',
+        marginLeft: 30,
+        marginRight: 30,
+        marginTop: 35,
+        height: 72,
+        borderRadius: 5,
+        alignItems: "center",
         justifyContent: 'center'
     },
     loginButton: {
@@ -64,11 +65,9 @@ export default StyleSheet.create({
         alignItems: "center",
         justifyContent: 'center'
     },
-    buttonText: {
-        fontSize: 22,
-        lineHeight: 21,
-        fontWeight: 'bold',
-        letterSpacing: 0.25,
+    buttonTitle: {
         color: 'white',
+        fontSize: 16,
+        fontWeight: "bold"
     },
 });
