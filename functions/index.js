@@ -144,16 +144,24 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
 exports.generateTicket = functions.https.onRequest(async (req, res) => {
   // request contains uid, eventName
   let ticketInfo = req.query;
-
+  let user = ticketInfo.uid;
   // add cost (lookup eventName), ticketSecret (hashgen), used=false, owner = uid, add ticketid to uid ticketsOwned array
   ticketInfo.used = false;
   const eventDoc = await admin.firestore().collection('events').doc(ticketInfo.eventName).get();
   ticketInfo.cost = eventDoc.data().cost;
   ticketInfo.ticketSecret = hashGen(randomStringGen());
+  const ticketDB = admin.firestore().collection('tickets');
 
-  await admin.firestore().collection('tickets').add(ticketInfo)
-    .then(() => {
+  await ticketDB.add(ticketInfo)
+    .then(async docRef => {
       delete ticketInfo.ticketSecret;
+      let u = admin.firestore().collection("users").doc(user);
+      let userData = await u.get();
+      let t = userData.data().ticketsOwned;
+      t.push(docRef.id);
+      await u.update({
+        ticketsOwned: t
+        })
       res.json({ ticketInfo })
     })
     .catch((error) => {
