@@ -109,4 +109,9 @@ export default StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
     },
+    modalText: {
+        color: 'black',
+        fontSize: 20,
+        fontWeight: "bold"
+    },
 });

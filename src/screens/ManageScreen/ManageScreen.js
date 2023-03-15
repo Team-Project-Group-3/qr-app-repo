@@ -92,15 +92,22 @@ const TicketPopup = ({state, handleState, ticket}) => {
           :
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{ticket.event}</Text>
-            <Text style={styles.modalText}>{ticket.cost}</Text>
-            <Text style={styles.modalText}>{ticket.event}</Text>
+            <Text style={styles.modalText}>Cost: £{ticket.cost}.00</Text>
+            <Text></Text>
             <QRCode value={JSON.stringify(ticket.encryptedData)} size={250} color="black"/>
+            <Text></Text>
+            <Pressable style={({ pressed }) => [
+              {
+                  backgroundColor: pressed
+                      ? "#008a92"
+                      : "#00C6D2",
+              },
+              styles.ticketButton]}
+              onPress={() => handleState(!state)}>
+              <Text style={styles.buttonText}>Close</Text>
+            </Pressable>
           </View>
         }
-        <Pressable style={[styles.button, styles.buttonClose]}
-          onPress={() => handleState(!state)}>
-          <Text style={styles.textStyle}>Hide Modal</Text>
-        </Pressable>
       </View>
     </Modal>
   )
