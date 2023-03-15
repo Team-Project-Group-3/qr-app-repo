@@ -5,9 +5,6 @@ export default StyleSheet.create({
         flex: 1,
         alignItems: 'center'
     },
-    title: {
-
-    },
     logo: {
         flex: 1,
         height: 120,
@@ -46,7 +43,6 @@ export default StyleSheet.create({
         fontSize: 16
     },
     button: {
-        backgroundColor: '#00C6D2',
         marginLeft: 30,
         marginRight: 30,
         marginTop: 35,
@@ -69,5 +65,48 @@ export default StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: "bold"
+    },
+    tabContainer: {
+        flex: 1,
+    },
+    ticketEntry: {
+        backgroundColor: '#e1e1e1',
+        padding: 5,
+        marginTop: 15,
+        marginHorizontal: 15,
+        borderRadius: 5,
+    },
+    ticketButton: {
+        padding: 19,
+        borderRadius: 5,
+    },
+    ticketText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: "bold"
+    },
+    title: {
+        fontSize: 32,
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+        width: 0,
+        height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
     },
 });

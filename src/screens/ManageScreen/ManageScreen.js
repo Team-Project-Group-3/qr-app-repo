@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
-import { Pressable, Alert, Modal, SafeAreaView, StatusBar, StyleSheet, FlatList, SectionList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, ActivityIndicator } from 'react-native'
+import { Pressable, Alert, Modal, FlatList, Text, View, Button, ActivityIndicator } from 'react-native'
 import NavButton from '../../Components/NavButton'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import styles from '../../styles'
 
 export default function ManageScreen(props) {
 
@@ -11,80 +12,58 @@ export default function ManageScreen(props) {
   const { data } = useData(user_tickets)
   const [modalVisible, setModalVisible] = useState(false);
 
-  /*
-  FetchTickets(user_tickets)
-  .then(data => {
-    data.forEach(ticket => {
-      const newTicket = {
-        encryptedData: ticket.qrPayload.encryptedData,
-        cost: ticket.ticketMeta.cost.integerValue,
-        event: ticket.ticketMeta.event.stringValue,
-      }
-      if(!ticket.ticketMeta.used.booleanValue)
-      {
-        if(!activeTickets)
-        {
-          activeTickets = []
-        }
-        activeTickets.push(ticket.ticketMeta.event.stringValue)
-        activeTicketsCombined.data.push({task: ticket.ticketMeta.event.stringValue})
-      }
-      else
-      {
-        usedTickets.push(ticket.ticketMeta.event.stringValue)
-        usedTicketsCombined.data.push({task: ticket.ticketMeta.event.stringValue})
-      }
-    });
-  })
-  .then(data => {
-    //console.log("Finished:")
-    //console.log(activeTicketsCombined)
-  })
-  .catch(error => error)
-  */
-
   useEffect(() => {
     props.navigation.setOptions({ headerTitle: "Manage Tickets", });
   }, []);
 
-  const Tab = createMaterialTopTabNavigator();
+  const Tab = createMaterialTopTabNavigator({tabBarOptions: {activeTintColor: "#000000"}});
+  const TabNav = Tab.Navigator;
 
   return(
-    <View style={styles.container}>
+    <View style={styles.tabContainer}>
       <TicketPopup state={modalVisible} handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={data}/>
-      <Tab.Navigator>
+      <TabNav options={{}}>
         <Tab.Screen name="Active" children={()=>
         {
-          if(!data) return <ActivityIndicator size="large" color="#123123"/>;
+          if(!data) return <ActivityIndicator size="large" color="#00C6D2"/>;
 
           const activeTickets = GetActiveTickets(data)
         
           return(
-            <View style={styles.container}>
+            <View style={styles.tabContainer}>
               <FlatList data={activeTickets} renderItem={({item}) => <TicketEntry handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={item} />}/>
             </View>
           )
         }}/>
         <Tab.Screen name="Used" children={()=>
         {
-          if(!data) return <ActivityIndicator size="large" color="#123123"/>;
+          if(!data) return <ActivityIndicator size="large" color="#00C6D2"/>;
 
           const usedTickets = GetUsedTickets(data)
 
           return(
-            <View style={styles.container}>
+            <View style={styles.tabContainer}>
               <FlatList data={usedTickets} renderItem={({item}) => <TicketEntry handleState={(modalVisible) => setModalVisible(modalVisible)} ticket={item} />}/>
             </View>
           )
         }}/>
-      </Tab.Navigator>
+      </TabNav>
     </View>
   )
 }
 
 const TicketEntry = ({handleState, ticket}) => (
-  <View style={styles.item}>
-    <Button title={ticket.event} onPress={() => handleState(true)}/>
+  <View style={styles.ticketEntry}>
+    <Pressable style={({ pressed }) => [
+      {
+          backgroundColor: pressed
+              ? "#008a92"
+              : "#00C6D2",
+      },
+      styles.ticketButton]}
+      onPress={() => handleState(true)}>
+      <Text style={styles.ticketText}>{ticket.event}</Text>
+    </Pressable>
   </View> 
 );
 
@@ -168,39 +147,3 @@ export const useData = (user_tickets) => {
 
   return { data: state };
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    padding: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-});

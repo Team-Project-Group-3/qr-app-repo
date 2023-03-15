@@ -11,7 +11,13 @@ const NavButton = ({ page, label, navigation }) => {
     return (
       <Pressable
         onPress={handlePress}
-        style={styles.button}>
+        style={({ pressed }) => [
+          {
+              backgroundColor: pressed
+                  ? "#008a92"
+                  : "#00C6D2",
+          },
+          styles.button]}>
         <Text style={styles.buttonText}>{label}</Text>
       </Pressable>
     );
