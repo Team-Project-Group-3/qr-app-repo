@@ -93,7 +93,6 @@ export default function PurchaseScreen(props) {
             />
 
             <NavButton page="Manage" navigation={props.navigation} label="See My Tickets"/>
-            <NavButton page="Home" navigation={props.navigation} label="Home"/>
         </View>
     )
 }
