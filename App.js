@@ -4,7 +4,7 @@ import { firebase } from './src/firebase/config'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { LoginScreen, HomeScreen, RegistrationScreen, DevScreen, DevScreen2, PurchaseScreen, UserHomeScreen, AdminHomeScreen, ManageScreen, EventScreen} from './src/screens'
-import {decode, encode} from 'base-64'
+import { decode, encode } from 'base-64'
 import { usePreventScreenCapture } from 'expo-screen-capture';
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
