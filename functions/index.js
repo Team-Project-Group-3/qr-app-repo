@@ -147,26 +147,42 @@ exports.generateTicket = functions.https.onRequest(async (req, res) => {
   let user = ticketInfo.uid;
   // add cost (lookup eventName), ticketSecret (hashgen), used=false, owner = uid, add ticketid to uid ticketsOwned array
   ticketInfo.used = false;
-  const eventDoc = await admin.firestore().collection('events').doc(ticketInfo.eventName).get();
-  ticketInfo.cost = eventDoc.data().cost;
-  ticketInfo.ticketSecret = hashGen(randomStringGen());
-  const ticketDB = admin.firestore().collection('tickets');
+  const event = admin.firestore().collection('events').doc(ticketInfo.eventName);
+  const eventDoc = await event.get();
+  const u = admin.firestore().collection("users").doc(user);
+  const userData = await u.get();
+  const available = eventDoc.data().availableTickets;
+  const credits = userData.data().credit;
+  if (available < 1) {
+    res.json("No tickets left for event")
+  }
+  else if(credits < 1){
+    res.json("User is out of credits, cannot buy ticket")
+  }
+  else {
+    ticketInfo.cost = eventDoc.data().cost;
+    ticketInfo.ticketSecret = hashGen(randomStringGen());
+    const ticketDB = admin.firestore().collection('tickets');
 
-  await ticketDB.add(ticketInfo)
-    .then(async docRef => {
-      delete ticketInfo.ticketSecret;
-      let u = admin.firestore().collection("users").doc(user);
-      let userData = await u.get();
-      let t = userData.data().ticketsOwned;
-      t.push(docRef.id);
-      await u.update({
-        ticketsOwned: t
+    await ticketDB.add(ticketInfo)
+      .then(async docRef => {
+        delete ticketInfo.ticketSecret;
+        let t = userData.data().ticketsOwned;
+        t.push(docRef.id);
+        await u.update({
+          credit: credits-1,
+          ticketsOwned: t
         })
-      res.json({ ticketInfo })
-    })
-    .catch((error) => {
-      res.status(500).send(error);
-    });
+        event.update({
+          availableTickets: available-1
+        })
+
+        res.json({ ticketInfo })
+      })
+      .catch((error) => {
+        res.status(500).send(error);
+      });
+  }
 });
 
 exports.resetTicket = functions.https.onRequest(async (req, res) => {
