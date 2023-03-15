@@ -35,9 +35,9 @@ export default function DevScreen(props) {
   const handleClick3 = async () => {
     try {
       const response = await axios.get(
-        'https://us-central1-qrapp-fe2f3.cloudfunctions.net/encryptTicket?id=test'
+        'https://us-central1-qrapp-fe2f3.cloudfunctions.net/getTicket?id=HhxhfJBkLNrm6SeHVm0S'
       );
-      setData3(response.data);
+      setData3(response.data.qrPayload);
     } catch (error) {
       console.error(error);
     }
