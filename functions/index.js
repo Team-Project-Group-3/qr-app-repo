@@ -157,20 +157,30 @@ exports.generateTicket = functions.https.onRequest(async (req, res) => {
     res.json("No tickets left for event")
   }
   else if(credits < 1){
-    res.json("User is out of credits, cannot buy ticket")
+    res.json("User is out of credits, cannot buy a ticket")
   }
   else {
-    ticketInfo.cost = eventDoc.data().cost;
-    ticketInfo.ticketSecret = hashGen(randomStringGen());
     const ticketDB = admin.firestore().collection('tickets');
+    let t = userData.data().ticketsOwned;
+    let currentTicket;
+    let doc;
+    for(let i = 0; i < t.length;i++){
+      doc = ticketDB.doc(t[i]);
+      currentTicket = await doc.get();
+       if(currentTicket.data().eventName == ticketInfo.eventName){
+         res.json("User already has a ticket for this event");
+       }
+    }
+    let cost = eventDoc.data().cost;
+    ticketInfo.cost = cost;
+    ticketInfo.ticketSecret = hashGen(randomStringGen());
 
     await ticketDB.add(ticketInfo)
       .then(async docRef => {
         delete ticketInfo.ticketSecret;
-        let t = userData.data().ticketsOwned;
         t.push(docRef.id);
         await u.update({
-          credit: credits-1,
+          credit: credits-cost,
           ticketsOwned: t
         })
         event.update({
