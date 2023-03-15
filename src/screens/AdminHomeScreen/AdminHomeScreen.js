@@ -3,7 +3,7 @@ import { Text, View, Button } from 'react-native'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import axios from 'axios';
 import styles from './scanStyles';
-import CustomButton from './ButtonPressable';
+import CustomButton from '../../components/ButtonPressable';
 
 export default function AdminHomeScreen({navigation}) {
     const [hasPermission, setHasPermission] = useState(null);
