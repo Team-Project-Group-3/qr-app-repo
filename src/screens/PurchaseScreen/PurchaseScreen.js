@@ -46,7 +46,6 @@ export default function PurchaseScreen(props) {
       .then(response => response.json())
       .then((data) => {
         setSuccess('Ticket purchased successfully!');
-        console.log(data);
     })
     .catch(error => {
         console.log('Error: ', error );
@@ -55,7 +54,6 @@ export default function PurchaseScreen(props) {
       
       /*
       .then(data => setTicket(data))
-      .then(console.log(data))
       .catch(error => console.error(error));*/
       
     }
