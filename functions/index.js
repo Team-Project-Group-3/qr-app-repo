@@ -164,35 +164,41 @@ exports.generateTicket = functions.https.onRequest(async (req, res) => {
     let t = userData.data().ticketsOwned;
     let currentTicket;
     let doc;
+    let check = false;
     for(let i = 0; i < t.length;i++){
       doc = ticketDB.doc(t[i]);
       currentTicket = await doc.get();
        if(currentTicket.data().eventName == ticketInfo.eventName){
-         res.json("User already has a ticket for this event");
+         check = true;
        }
     }
-    let cost = eventDoc.data().cost;
-    ticketInfo.cost = cost;
-    ticketInfo.ticketSecret = hashGen(randomStringGen());
+      if(check){
+        res.json("User already has a ticket for this event");
+      }
+      else{
+        let cost = eventDoc.data().cost;
+        ticketInfo.cost = cost;
+        ticketInfo.ticketSecret = hashGen(randomStringGen());
 
-    await ticketDB.add(ticketInfo)
-      .then(async docRef => {
-        delete ticketInfo.ticketSecret;
-        t.push(docRef.id);
-        await u.update({
-          credit: credits-cost,
-          ticketsOwned: t
-        })
-        event.update({
-          availableTickets: available-1
-        })
+        await ticketDB.add(ticketInfo)
+          .then(async docRef => {
+            delete ticketInfo.ticketSecret;
+            t.push(docRef.id);
+            await u.update({
+              credit: credits-cost,
+              ticketsOwned: t
+            })
+            event.update({
+              availableTickets: available-1
+            })
 
-        res.json({ ticketInfo })
-      })
-      .catch((error) => {
-        res.status(500).send(error);
-      });
-  }
+            res.json({ ticketInfo })
+          })
+          .catch((error) => {
+            res.status(500).send(error);
+          });
+      }
+    }
 });
 
 exports.resetTicket = functions.https.onRequest(async (req, res) => {
