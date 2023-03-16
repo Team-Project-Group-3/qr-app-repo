@@ -122,7 +122,7 @@ function GetActiveTickets(tickets)
     if(!ticket.ticketMeta.used.booleanValue)
       {
         const newTicket = {
-          encryptedData: ticket.qrPayload.encryptedData,
+          encryptedData: ticket.qrPayload,
           cost: ticket.ticketMeta.cost.integerValue,
           event: ticket.ticketMeta.event.stringValue,
         }
