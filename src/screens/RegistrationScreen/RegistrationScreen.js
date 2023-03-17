@@ -22,6 +22,10 @@ export default function RegistrationScreen({ navigation }) {
             alert("Passwords don't match.")
             return
         }
+        else if (!password.match("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[£#?!@$%^&*-]).{8,15}$")) {
+            alert("Please enter a password between 8 to 15 characters that uses an upper case letter, lower case letter and special character.")
+            return
+        }
 
         firebase
             .auth()
