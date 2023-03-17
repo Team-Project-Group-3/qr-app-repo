@@ -2,15 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { FlatList, Keyboard, Text, TextInput, TouchableOpacity, View, Button, StyleSheet, Pressable, ActivityIndicator } from 'react-native'
 import NavButton from '../../components/NavButton'
 import { firebase } from '../../firebase/config'
+import { Alert } from 'react-native'
 
 
 export default function PurchaseScreen(props) {
     
     const eventsRef = firebase.firestore().collection('events');
-
-    const user = props.extraData
+    const usersRef = firebase.firestore().collection("users");
+    const user = props.extraData;
     const [isLoading, setIsLoading] = useState(false);
-    
+    const [credits, setCredits] = useState('');
     const [events, setEvents] = useState([]);
     const [selectedEvent, setSelectedEvent] = useState(null);
     const [ticket, setTicket] = useState(null);
@@ -25,8 +26,16 @@ export default function PurchaseScreen(props) {
             });
             setEvents(events);
         });
+        const creditUpdate = usersRef.doc(user.id).onSnapshot((update) => {
+            const data = update.data();
+            const credits = data.credit;
+            setCredits(credits);
+        });
 
-        return () => unsubscribe();
+        return () => {
+            unsubscribe();
+            creditUpdate();
+        }
     }, []);
 
     const handleEventPress = (event) => {
@@ -45,8 +54,21 @@ export default function PurchaseScreen(props) {
         fetch(url)
       .then(response => response.json())
       .then((data) => {
+
+        if(data == "User already has a ticket for this event"){
+            Alert.alert(
+            'Ticket purchase unsuccessful',
+            data,
+            [
+                {text: 'OK', onPress:() => console.log("User acknowledged message")},
+            ],
+            {cancelable: false},
+            );
+        }
+        else{
         setSuccess('Ticket purchased successfully!');
         console.log(data);
+        }
     })
     .catch(error => {
         console.log('Error: ', error );
@@ -62,7 +84,7 @@ export default function PurchaseScreen(props) {
 
     return(
         <View>
-            <Text>Credits:  {user.credit}</Text>
+            <Text>Credits:  {credits}</Text>
 
 
             {success !== '' && (

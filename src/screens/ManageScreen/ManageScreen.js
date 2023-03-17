@@ -4,13 +4,15 @@ import NavButton from '../../components/NavButton'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import styles from '../../styles'
 import QRCode from 'react-native-qrcode-svg'
+import { firebase } from '../../firebase/config'
+
 
 export default function ManageScreen(props) {
 
   const user = props.extraData
   const user_tickets = user.ticketsOwned
 
-  const { data } = useData(user_tickets)
+  const { data } = useData(user_tickets,props)
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState()
 
@@ -147,13 +149,15 @@ function GetUsedTickets(tickets)
   return usedTickets
 }
 
-export const useData = (user_tickets) => {
+export const useData = (user_tickets,props) => {
   const [state, setState] = useState();
-
   console.log("GETTING TICKETS!!!!")
 
   useEffect(() => {
     const dataFetch = async () => {
+      const user = firebase.firestore().collection("users").doc(props.extraData.id);
+      const userData = await user.get();
+      user_tickets = userData.data().ticketsOwned;
         var urls = []
         user_tickets.forEach(ticket => {
           urls.push('https://us-central1-qrapp-fe2f3.cloudfunctions.net/getTicket?id=' + ticket)
