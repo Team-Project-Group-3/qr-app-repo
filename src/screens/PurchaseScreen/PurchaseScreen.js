@@ -82,7 +82,7 @@ export default function PurchaseScreen(props) {
                         {selectedEvent === item && (
                             <View style={styles.Details}>
                                 <Text style={styles.TextDetails}>Cost: {item.cost}</Text>
-                                <Text style={styles.TextDetails}>Available Tickets: {item.AvailableTickets}</Text>
+                                <Text style={styles.TextDetails}>Available Tickets: {item.availableTickets}</Text>
                                 <TouchableOpacity onPress={() => buyTicket(item)}>
                                 <View style={styles.button}>
                                 <Text style={styles.buttonText}>Buy Ticket</Text>
