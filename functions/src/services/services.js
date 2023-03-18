@@ -17,19 +17,6 @@ function randomStringGen() {
   return result;
 }
 
-function createEvent(eventName) {
-  const createEvent = db.collection("events").doc(eventName).collection("Tickets");
-  const numberOfTickets = 100;
-  for (i = 1; i < numberOfTickets + 1; i++) {
-    let ticketNumber = "Ticket " + i;
-    console.log(ticketNumber);
-    let createTickets = createEvent.doc(ticketNumber);
-    createTickets.set({
-      TicketID: ticketNumber
-    })
-  }
-}
-
 function encryptData(data, algo, key, inVec) {
   try {
     const cipher = crypto.createCipheriv(algo, key, inVec);
