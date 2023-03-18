@@ -53,7 +53,7 @@ export default function PurchaseScreen(props) {
         const url = `https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket?uid=${userName}&eventName=${ticketName}`;
         fetch(url)
       .then(response => response.json())
-      .then((data) => {
+      .then(data => {
 
         if(data == "User already has a ticket for this event"){
             Alert.alert(
@@ -66,9 +66,16 @@ export default function PurchaseScreen(props) {
             );
         }
         else{
-        setSuccess('Ticket purchased successfully!');
+        Alert.alert(
+                    'Ticket purchase successful',
+                    'Thank you for purchasing a ticket for '+ticketName,
+                    [
+                        {text: 'OK', onPress:() => console.log("User acknowledged message")},
+                    ],
+                    {cancelable: false},
+                    );
         console.log(data);
-    })
+    }})
     .catch(error => {
         console.log('Error: ', error );
     })
