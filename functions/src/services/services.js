@@ -31,9 +31,21 @@ function createEvent(eventName) {
 }
 
 function encryptData(data, algo, key, inVec) {
-  const cipher = crypto.createCipheriv(algo, key, inVec);
-  let encryptedData = Buffer.from(cipher.update(data, 'utf-8', 'hex') + cipher.final('hex')).toString('base64');
-  return encryptedData;
+  try {
+    const cipher = crypto.createCipheriv(algo, key, inVec);
+    let encryptedData = Buffer.from(cipher.update(data, 'utf-8', 'hex') + cipher.final('hex')).toString('base64');
+    return {
+      status: 'success',
+      data: encryptedData,
+    };
+  } catch (err) {
+    console.error('An error occurred while encrypting the data:', err);
+    return {
+      status: 'error',
+      message: 'An error occurred while encrypting the data',
+      error: err,
+    };
+  }
 }
 
 function decryptData(data, algo, k, iv) {
