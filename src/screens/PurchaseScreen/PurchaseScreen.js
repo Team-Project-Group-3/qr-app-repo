@@ -55,15 +55,32 @@ export default function PurchaseScreen(props) {
       .then(response => response.json())
       .then(data => {
 
-        if(data == "User already has a ticket for this event"){
+
+        console.log("Datamessage: "+data.message);
+
+        if(data.message == "User already has a ticket for this event"){
+
             Alert.alert(
-            'Ticket purchase unsuccessful',
-            data,
-            [
-                {text: 'OK', onPress:() => console.log("User acknowledged message")},
-            ],
-            {cancelable: false},
-            );
+                'Ticket purchase unsuccessful',
+                data.message,
+                [
+                    {text: 'OK', onPress:() => console.log("User acknowledged message")},
+                ],
+                {cancelable: false},
+                );
+
+        }
+        if(data.message == "User is out of credits, cannot buy a ticket"){
+
+            Alert.alert(
+                'User is out of credits, cannot buy a ticket',
+                data.message,
+                [
+                    {text: 'OK', onPress:() => console.log("User acknowledged message")},
+                ],
+                {cancelable: false},
+                );
+
         }
         else{
         Alert.alert(
@@ -81,21 +98,17 @@ export default function PurchaseScreen(props) {
     })
     .finally(() => setIsLoading(false));
       
-      /*
-      .then(data => setTicket(data))
-      .catch(error => console.error(error));*/
-      
     }
 
-    return(
+    return( 
         <View>
-            <Text>Credits:  {credits}</Text>
-
+            <View style={[styles.creditsContainer, {marginTop: 0}]}>
+                <Text style={[styles.credits, {textAlign: 'center', marginBottom: 0}]}>Credits: £{credits}</Text>
+            </View>
 
             {success !== '' && (
                 <Text style={styles.success}>{success}</Text>
             )}
-
 
              <Text style={styles.title}>Upcoming Events</Text>
              {isLoading && <ActivityIndicator />}
@@ -108,16 +121,18 @@ export default function PurchaseScreen(props) {
                         onPress={() => handleEventPress(item)}
                     >
                         <Text style={styles.Name}>{item.id}</Text>
-                        {selectedEvent === item && (
+                        {selectedEvent === item && ( 
                             <View style={styles.Details}>
-                                <Text style={styles.TextDetails}>Cost: {item.cost}</Text>
-                                <Text style={styles.TextDetails}>Available Tickets: {item.availableTickets}</Text>
-                                <TouchableOpacity onPress={() => buyTicket(item)}>
+                            <Text style={styles.TextDetails}><Text style={styles.bold}>Location: </Text>{item.location}</Text>
+                            <Text style={styles.TextDetails}><Text style={styles.bold}>Date:</Text> {item.date.toDate().toLocaleDateString()}</Text>
+                            <Text style={styles.TextDetails}><Text style={styles.bold}>Cost:</Text> £{item.cost}</Text>
+                            <Text style={styles.TextDetails}><Text style={styles.bold}>Available Tickets:</Text> {item.availableTickets}</Text>
+                            <TouchableOpacity onPress={() => buyTicket(item)}>
                                 <View style={styles.button}>
-                                <Text style={styles.buttonText}>Buy Ticket</Text>
+                                    <Text style={styles.buttonText}>Buy Ticket</Text>
                                 </View>
                             </TouchableOpacity>
-                            </View>
+                        </View>
                         )}
                     </TouchableOpacity>
                 )}
@@ -142,9 +157,10 @@ const styles = StyleSheet.create({
     },
     Details: {
         marginTop: 10,
+        fontSize: 20
     },
     TextDetails: {
-        fontSize: 12,
+        fontSize: 20,
     },
     button: {
         position: 'relative',
@@ -175,4 +191,30 @@ const styles = StyleSheet.create({
         marginTop: 10,
         textAlign: 'center',
     },
+    creditsContainer: {
+        backgroundColor: '#00C6D2',
+        borderRadius: 0,
+        padding: 10,
+        marginBottom: 30,
+        // borderColor: 'black',
+        // borderTopWidth: 2,
+        // borderBottomWidth: 2
+      },
+      credits: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'white',
+        textAlign: 'right',
+      },
+      Details: {
+        },
+        TextDetails: {
+        
+        },
+        buttonText: {
+            color: "white"
+        },
+        bold: {
+        fontWeight: 'bold'
+        }
 });

@@ -39,7 +39,7 @@ export default StyleSheet.create({
     buttonTitle: {
         color: 'white',
         fontSize: 16,
-        fontWeight: "bold"
+        fontWeight: "bold",
     },
     footerView: {
         flex: 1,
@@ -54,5 +54,13 @@ export default StyleSheet.create({
         color: "#788eec",
         fontWeight: "bold",
         fontSize: 16
-    }
+    },
+    credits: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#333',
+        textAlign: 'right',
+        marginBottom: 10,
+        marginRight: 10,
+      }
 })

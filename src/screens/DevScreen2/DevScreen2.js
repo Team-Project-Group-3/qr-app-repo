@@ -61,8 +61,8 @@ export default function DevScreen(props) {
       <View style={{ marginTop: 60, alignItems: 'center', textAlign: 'center'}}>
         <Text style={{ fontSize: 30, fontWeight: 'bold', textDecorationLine: 'underline' }}>QR Code Tester</Text>
         <View style={{ flexDirection: 'row', marginTop: 20 ,alignItems: 'center',textAlign: 'center'}}>
-          <TouchableOpacity onPress={() => copyToClipboard('5BMMowcWB3a1AGOGRSme')}>
-            <Text style={{ fontSize: 16, marginRight: 10, textAlign: 'center' }}>Copy Example Ticket ID: 5BMMowcWB3a1AGOGRSme</Text>
+          <TouchableOpacity onPress={() => copyToClipboard('Yk1hkvNj0k37g02pIUou')}>
+            <Text style={{ fontSize: 16, marginRight: 10, textAlign: 'center' }}>Copy Example Ticket ID: Yk1hkvNj0k37g02pIUou</Text>
           </TouchableOpacity>
         </View>
       </View>

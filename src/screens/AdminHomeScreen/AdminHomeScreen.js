@@ -30,6 +30,7 @@ export default function AdminHomeScreen({navigation}) {
         try{
             qrPayload = JSON.parse(data);
             id = qrPayload.ticketId;
+            hmac = qrPayload.hmac;
             encData = qrPayload.encryptedData;
         }
         catch(err){
@@ -37,7 +38,7 @@ export default function AdminHomeScreen({navigation}) {
         }
         try{
             console.log(id);
-            url = `https://us-central1-qrapp-fe2f3.cloudfunctions.net/verifyTicket?id=${id}&encData=${encData}`
+            url = `https://us-central1-qrapp-fe2f3.cloudfunctions.net/verifyTicket?id=${id}&encData=${encData.data}&hmac=${hmac}`
             const response = await axios.get(url);
             res = response.data.response;
             stat = response.data.status;

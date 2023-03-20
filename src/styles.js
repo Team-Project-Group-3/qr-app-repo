@@ -49,7 +49,7 @@ export default StyleSheet.create({
         height: 72,
         borderRadius: 5,
         alignItems: "center",
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     loginButton: {
         backgroundColor: '#00C6D2',

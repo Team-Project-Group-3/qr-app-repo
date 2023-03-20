@@ -5,6 +5,8 @@ const admin = require('firebase-admin');
 
 admin.initializeApp();
 const algo = 'aes-256-cbc';
+const hmacKey = 'X43ARQR-Secret-Key_9128310';
+
 
 exports.getTicket = functions.https.onRequest(async (req, res) => {
 
@@ -26,8 +28,18 @@ exports.getTicket = functions.https.onRequest(async (req, res) => {
 
   const encData = encryptData(JSON.stringify(payload), algo, key, inVec);
 
+  let hmac = '';
+  try {
+    hmac = crypto.createHmac('sha256', hmacKey)
+                     .update(encData.data)
+                     .digest('hex');
+  } catch (error) {
+    console.error("Error occurred while generating HMAC:", error);
+  }
+
   const qrPayload = {
     "encryptedData": encData,
+    "hmac": hmac,
     "ticketId": id
   }
 
@@ -66,6 +78,7 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
   const collection = 'tickets';
   const ticketRef = admin.firestore().collection(collection).doc(id);
   const ticket = await ticketRef.get();
+  const hmac = req.query.hmac;
 
   if (!ticket.exists) {
     res.json({
@@ -103,6 +116,15 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
         "status": "unsuccessful",
         "response": "ticket already used",
       });
+    }
+    const hmacToCheck = crypto.createHmac('sha256', hmacKey)
+      .update(encData)
+      .digest('hex');
+    if (hmac !== hmacToCheck) {
+      res.json({
+        "status": "unsuccessful",
+        "response": "ticket hash invalid"
+      })
     }
     if (difference <= timeWindow) {
       used = true;
@@ -142,64 +164,66 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
 });
 
 exports.generateTicket = functions.https.onRequest(async (req, res) => {
-  // request contains uid, eventName
-  let ticketInfo = req.query;
-  let user = ticketInfo.uid;
-  // add cost (lookup eventName), ticketSecret (hashgen), used=false, owner = uid, add ticketid to uid ticketsOwned array
-  ticketInfo.used = false;
-  const event = admin.firestore().collection('events').doc(ticketInfo.eventName);
-  const eventDoc = await event.get();
-  const u = admin.firestore().collection("users").doc(user);
-  const userData = await u.get();
-  const available = eventDoc.data().availableTickets;
-  const credits = userData.data().credit;
-  if (available < 1) {
-    res.json("No tickets left for event")
-  }
-  else if(credits < 1){
-    res.json("User is out of credits, cannot buy a ticket")
-  }
-  else {
-    const ticketDB = admin.firestore().collection('tickets');
-    let t = userData.data().ticketsOwned;
-    let currentTicket;
-    let doc;
-    let check = false;
-    for(let i = 0; i < t.length;i++){
-      doc = ticketDB.doc(t[i]);
-      currentTicket = await doc.get();
-       if(currentTicket.data().eventName == ticketInfo.eventName){
-         check = true;
-       }
+  try {
+    // request contains uid, eventName
+    let ticketInfo = req.query;
+    let user = ticketInfo.uid;
+    // add cost (lookup eventName), ticketSecret (hashgen), used=false, owner = uid, add ticketid to uid ticketsOwned array
+    ticketInfo.used = false;
+    const event = admin.firestore().collection('events').doc(ticketInfo.eventName);
+    const eventDoc = await event.get();
+    const u = admin.firestore().collection("users").doc(user);
+    const userData = await u.get();
+    const available = eventDoc.data().availableTickets;
+    const credits = userData.data().credit;
+    let cost = eventDoc.data().cost;
+
+    if (available < 1) {
+      res.status(200).json({ message: "No tickets left for event" });
     }
-      if(check){
-        res.json("User already has a ticket for this event");
+    else if (credits - cost < 0) {
+      res.status(200).json({ message: "User is out of credits, cannot buy a ticket" });
+    }
+    else {
+      const ticketDB = admin.firestore().collection('tickets');
+      let t = userData.data().ticketsOwned;
+      let currentTicket;
+      let doc;
+      let check = false;
+      for (let i = 0; i < t.length; i++) {
+        doc = ticketDB.doc(t[i]);
+        currentTicket = await doc.get();
+        if (currentTicket.data().eventName == ticketInfo.eventName) {
+          check = true;
+        }
       }
-      else{
-        let cost = eventDoc.data().cost;
+      if (check) {
+        res.status(200).json({ message: "User already has a ticket for this event" });
+      }
+      else {
         ticketInfo.cost = cost;
         ticketInfo.ticketSecret = hashGen(randomStringGen());
 
-        await ticketDB.add(ticketInfo)
-          .then(async docRef => {
-            delete ticketInfo.ticketSecret;
-            t.push(docRef.id);
-            await u.update({
-              credit: credits-cost,
-              ticketsOwned: t
-            })
-            event.update({
-              availableTickets: available-1
-            })
+        const docRef = await ticketDB.add(ticketInfo);
+        delete ticketInfo.ticketSecret;
+        t.push(docRef.id);
+        await u.update({
+          credit: credits - cost,
+          ticketsOwned: t
+        })
+        event.update({
+          availableTickets: available - 1
+        })
 
-            res.json({ ticketInfo })
-          })
-          .catch((error) => {
-            res.status(500).send(error);
-          });
+        res.status(200).json({ ticketInfo });
       }
     }
+  } catch (error) {
+    console.error(error);
+    res.status(200).json({ message: "Error generating ticket" });
+  }
 });
+
 
 exports.resetTicket = functions.https.onRequest(async (req, res) => {
 
