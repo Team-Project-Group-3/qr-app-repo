@@ -87,13 +87,13 @@ export default function LoginScreen({navigation}) {
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>No account? <Text onPress={onFooterLinkPress} style={styles.footerLink}>Sign up</Text></Text>
                 </View>
-                <View style={styles.footerView}>
+                {/* <View style={styles.footerView}>
                     <Text style={styles.footerText}>Go to <Text onPress={onDevLinkPress} style={styles.footerLink}>Buy Ticket Dev Page</Text></Text>
                 </View>
                 <View style={styles.footerView}>
                     <Text style={styles.footerText}>Go to <Text onPress={onDev2LinkPress} style={styles.footerLink}>QR Code Tester Dev Page</Text></Text>
-                    <Text onPress={onDevLinkPress} style={styles.footerLink}>Go To Dev Page</Text>
-                </View>
+                    <Text onPress={onDevLinkPress} style={styles.footerLink}>Go To Dev Page</Text> */}
+                {/* </View> */}
             </KeyboardAwareScrollView>
         </View>
     )
