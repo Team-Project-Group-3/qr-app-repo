@@ -27,26 +27,41 @@ Note:
 
 You will need to change JSON object the `secret.js` file in the `credentials` directory if you want to use the app. This is secret to the developers and only availiable upon request.
 
-## Login Screenshots
+<h2>Login Screenshots</h2>
+	<table>
+		<tr>
+			<td><img src="src/assets/IMG_4297_iphone13prographite_portrait.png" alt="Login Screenshot 1"></td>
+			<td><img src="src/assets/IMG_4310_iphone13prographite_portrait.png" alt="Login Screenshot 2"></td>
+		</tr>
+	</table>
 
-|                    |                    |
-|:------------------:|:------------------:|
-| ![](src/assets/IMG_4297_iphone13prographite_portrait.png) | ![](src/assets/IMG_4310_iphone13prographite_portrait.png) |
+  <h2>Customer Account Screenshots</h2>
+	<table>
+		<tr>
+			<td><img src="src/assets/IMG_4298_iphone13prographite_portrait.png" alt="Customer Account Screenshot 1"></td>
+			<td><img src="src/assets/IMG_4299_iphone13prographite_portrait.png" alt="Customer Account Screenshot 2"></td>
+		</tr>
+		<tr>
+			<td><img src="src/assets/IMG_4300_iphone13prographite_portrait.png" alt="Customer Account Screenshot 3"></td>
+			<td><img src="src/assets/IMG_4301_iphone13prographite_portrait.png" alt="Customer Account Screenshot 4"></td>
+		</tr>
+		<tr>
+			<td><img src="src/assets/IMG_4302_iphone13prographite_portrait.png" alt="Customer Account Screenshot 5"></td>
+			<td><img src="src/assets/IMG_4303_iphone13prographite_portrait.png" alt="Customer Account Screenshot 6"></td>
+		</tr>
+	</table>
 
-
-## Customer Account Screenshots
-
-|                    |                    |
-|:------------------:|:------------------:|
-| ![](src/assets/IMG_4298_iphone13prographite_portrait.png) | ![](src/assets/IMG_4299_iphone13prographite_portrait.png) |
-| ![](src/assets/IMG_4300_iphone13prographite_portrait.png) | ![](src/assets/IMG_4301_iphone13prographite_portrait.png) |
-| ![](src/assets/IMG_4302_iphone13prographite_portrait.png) | ![](src/assets/IMG_4303_iphone13prographite_portrait.png) |
-
-
-## Verifier Account  Screenshots
-
-|                    |                    |
-|:------------------:|:------------------:|
-| ![](src/assets/IMG_4304_iphone13prographite_portrait.png) | ![](src/assets/IMG_4305_iphone13prographite_portrait.png) |
-| ![](src/assets/IMG_4306_iphone13prographite_portrait.png) | ![](src/assets/IMG_4308_iphone13prographite_portrait.png) |
-| ![](src/assets/IMG_4309_iphone13prographite_portrait.png) | ![]() |
+  <h2>Verifier Account Screenshots</h2>
+	<table>
+		<tr>
+			<td><img src="src/assets/IMG_4304_iphone13prographite_portrait.png" alt="Verifier Account Screenshot 1"></td>
+			<td><img src="src/assets/IMG_4305_iphone13prographite_portrait.png" alt="Verifier Account Screenshot 2"></td>
+		</tr>
+		<tr>
+			<td><img src="src/assets/IMG_4306_iphone13prographite_portrait.png" alt="Verifier Account Screenshot 3"></td>
+      <td><img src="src/assets/IMG_4308_iphone13prographite_portrait.png" alt="Verifier Account Screenshot 4"></td>
+		</tr>
+    <tr>
+			<td><img src="src/assets/IMG_4309_iphone13prographite_portrait.png" alt="Verifier Account Screenshot 5"></td>
+		</tr>
+	</table>
