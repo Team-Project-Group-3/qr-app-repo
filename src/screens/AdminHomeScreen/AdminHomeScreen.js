@@ -15,7 +15,6 @@ export default function AdminHomeScreen({navigation}) {
 
     useEffect(()=> {
         const getBarCodeScannerPermissions = async () => {
-            // requests permissions
             const { status } = await BarCodeScanner.requestPermissionsAsync();
             setHasPermission(status === 'granted');
         };
@@ -24,7 +23,6 @@ export default function AdminHomeScreen({navigation}) {
     }, []);
 
     const handleBarCodeScanned = async ({ type, data}) =>{
-        // function to handle data scanned from QR scanner
         setScanned(true);
         verified = false;
         try{
@@ -37,20 +35,16 @@ export default function AdminHomeScreen({navigation}) {
             console.log("invalid payload " + err);
         }
         try{
-            console.log(id);
             url = `https://us-central1-qrapp-fe2f3.cloudfunctions.net/verifyTicket?id=${id}&encData=${encData.data}&hmac=${hmac}`
             const response = await axios.get(url);
             res = response.data.response;
             stat = response.data.status;
-            console.log(`Response : ${res} Status: ${stat}`);
             if (stat === "success"){
-                console.log("verified");
                 setColor("#65ff15");
                 alert("Ticket valid");
             }
             else{
                 setColor("red");
-                console.log("verification failed");
                 alert(`Ticket invalid: ${res}`);
             }
         }

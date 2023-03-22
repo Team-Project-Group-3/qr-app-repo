@@ -5,7 +5,6 @@ import { firebase } from '../../firebase/config'
 
 
 export default function EventScreen(props) {
-  console.log(props)
     
     return(
       <View>
@@ -31,13 +30,3 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     });
-       // const handleClick = async () => {
-    //     try {
-    //       const response = await axios.get(
-    //         'https://us-central1-qrapp-fe2f3.cloudfunctions.net/generateTicket'
-    //       );
-    //       setData(response.data);
-    //     } catch (error) {
-    //       console.error(error);
-    //     }
-    //   };

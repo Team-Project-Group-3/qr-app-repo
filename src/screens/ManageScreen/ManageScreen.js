@@ -153,8 +153,6 @@ function GetUsedTickets(tickets)
 
 export const useData = (user_tickets,props) => {
   const [state, setState] = useState();
-  console.log("GETTING TICKETS!!!!")
-
   useEffect(() => {
     const dataFetch = async () => {
       const user = firebase.firestore().collection("users").doc(props.extraData.id);

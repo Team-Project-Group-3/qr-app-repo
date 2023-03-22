@@ -4,7 +4,6 @@ function hashGen(text) {
   let rawHash = crypto.createHash('sha256');
   rawHash.update(text);
   let hash = rawHash.digest('hex');
-  console.log(hash);
   return hash;
 }
 

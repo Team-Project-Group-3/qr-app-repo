@@ -13,8 +13,6 @@ export default function HomeScreen(props) {
     const entityRef = firebase.firestore().collection('entities')
     const userID = props.extraData.id
 
-    console.log(props.extraData.is_verifier)
-
     useEffect(() => {
         entityRef
             .where("authorID", "==", userID)

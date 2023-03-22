@@ -6,7 +6,6 @@ import { firebase } from '../../firebase/config'
 import { usePreventScreenCapture } from 'expo-screen-capture';
 
 export default function LoginScreen({navigation}) {
-    // usePreventScreenCapture();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 

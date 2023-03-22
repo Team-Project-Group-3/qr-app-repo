@@ -91,7 +91,6 @@ export default function PurchaseScreen(props) {
                     ],
                     {cancelable: false},
                     );
-        console.log(data);
     }})
     .catch(error => {
         console.log('Error: ', error );

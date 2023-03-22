@@ -165,10 +165,8 @@ exports.verifyTicket = functions.https.onRequest(async (req, res) => {
 
 exports.generateTicket = functions.https.onRequest(async (req, res) => {
   try {
-    // request contains uid, eventName
     let ticketInfo = req.query;
     let user = ticketInfo.uid;
-    // add cost (lookup eventName), ticketSecret (hashgen), used=false, owner = uid, add ticketid to uid ticketsOwned array
     ticketInfo.used = false;
     const event = admin.firestore().collection('events').doc(ticketInfo.eventName);
     const eventDoc = await event.get();
@@ -236,7 +234,6 @@ exports.resetTicket = functions.https.onRequest(async (req, res) => {
     used: used,
     })
     .then(() => {
-        console.log('Document updated successfully');
         res.send("success");
     })
     .catch((error) => {
