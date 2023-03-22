@@ -27,7 +27,7 @@ Note:
 
 You will need to change JSON object the `secret.js` file in the `credentials` directory if you want to use the app. This is secret to the developers and only availiable upon request.
 
-<h2>Login Screenshots</h2>
+<h2>Login and Registration Screenshots</h2>
 	<table>
 		<tr>
 			<td><img src="src/assets/IMG_4297_iphone13prographite_portrait.png" alt="Login Screenshot 1"></td>
