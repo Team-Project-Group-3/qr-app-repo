@@ -1,5 +1,5 @@
 <div style="display: flex; align-items: center;">
-  <img src="src/assets/icon.png" alt="Logo" width="50"/>
+  <img src="src/assets/icon.png" alt="Logo" width="80"/>
   <h1 style="margin-left: 10px; margin-bottom: 0px">QR Ticketing App</h1>
 </div>
 
