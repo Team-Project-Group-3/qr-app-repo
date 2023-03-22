@@ -23,26 +23,30 @@ To install the necessary packages, run `npm install` in the root directory. You 
 
 To run the app on an emulator or phone, run the command: `npx expo start --tunnel`, which allows for tunneling to the Android or IOS app to download and test the app by scanning the command line QR code. Alternatively, you can simply press 'a' or 'i' in the command line to open the app on a local Android or iOS emulator.
 
+Note:
+
+You will need to change JSON object the `secret.js` file in the `credentials` directory if you want to use the app. This is secret to the developers and only availiable upon request.
+
 ## Login Screenshots
 
 |                    |                    |
 |:------------------:|:------------------:|
-| ![](src\assets\IMG_4297_iphone13prographite_portrait.png) | ![](src\assets\IMG_4310_iphone13prographite_portrait.png) |
+| ![](src/assets/IMG_4297_iphone13prographite_portrait.png) | ![](src/assets/IMG_4310_iphone13prographite_portrait.png) |
 
 
 ## Customer Account Screenshots
 
 |                    |                    |
 |:------------------:|:------------------:|
-| ![](src\assets\IMG_4298_iphone13prographite_portrait.png) | ![](src\assets\IMG_4299_iphone13prographite_portrait.png) |
-| ![](src\assets\IMG_4300_iphone13prographite_portrait.png) | ![](src\assets\IMG_4301_iphone13prographite_portrait.png) |
-| ![](src\assets\IMG_4302_iphone13prographite_portrait.png) | ![](src\assets\IMG_4303_iphone13prographite_portrait.png) |
+| ![](src/assets/IMG_4298_iphone13prographite_portrait.png) | ![](src/assets/IMG_4299_iphone13prographite_portrait.png) |
+| ![](src/assets/IMG_4300_iphone13prographite_portrait.png) | ![](src/assets/IMG_4301_iphone13prographite_portrait.png) |
+| ![](src/assets/IMG_4302_iphone13prographite_portrait.png) | ![](src/assets/IMG_4303_iphone13prographite_portrait.png) |
 
 
 ## Verifier Account  Screenshots
 
 |                    |                    |
 |:------------------:|:------------------:|
-| ![](src\assets\IMG_4304_iphone13prographite_portrait.png) | ![](src\assets\IMG_4305_iphone13prographite_portrait.png) |
-| ![](src\assets\IMG_4306_iphone13prographite_portrait.png) | ![](src\assets\IMG_4308_iphone13prographite_portrait.png) |
-| ![](src\assets\IMG_4309_iphone13prographite_portrait.png) | ![]() |
+| ![](src/assets/IMG_4304_iphone13prographite_portrait.png) | ![](src/assets/IMG_4305_iphone13prographite_portrait.png) |
+| ![](src/assets/IMG_4306_iphone13prographite_portrait.png) | ![](src/assets/IMG_4308_iphone13prographite_portrait.png) |
+| ![](src/assets/IMG_4309_iphone13prographite_portrait.png) | ![]() |
